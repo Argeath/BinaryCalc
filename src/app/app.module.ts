@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {
   NgModule,
@@ -31,6 +31,21 @@ import { XLargeDirective } from './home/x-large';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import {BsDropdownModule} from "ngx-bootstrap";
+import {ChmodComponent} from "./chmod/chmod.component";
+import {TagCloudComponent} from "./tag-cloud/tag-cloud.component";
+import {CopyClipboardDirective} from "./copy-clipboard.directive";
+import {UnixTimeComponent} from "./unixTime/unixTime.component";
+import {ColorsComponent} from "./colors/colors.component";
+import {InfoComponent} from "./info/info.component";
+import {ErrorComponent} from "./error/error.component";
+import {ResultComponent} from "./result/result.component";
+import {RomaniansComponent} from "./romanians/romanians.component";
+import {BinariesComponent} from "./binaries/binaries.component";
+import {ArithmeticsComponent} from "./arithmetics/arithmetics.component";
+import {NegativesComponent} from "./negatives/negatives.component";
+import {ConversionsComponent} from "./conversions/conversions.component";
+import {MenuComponent} from "./menu/menu.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -51,10 +66,20 @@ type StoreType = {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    AboutComponent,
-    HomeComponent,
-    NoContentComponent,
-    XLargeDirective
+    MenuComponent,
+    ConversionsComponent,
+    NegativesComponent,
+    ArithmeticsComponent,
+    BinariesComponent,
+    RomaniansComponent,
+    ResultComponent,
+    ErrorComponent,
+    InfoComponent,
+    ColorsComponent,
+    UnixTimeComponent,
+    CopyClipboardDirective,
+    TagCloudComponent,
+    ChmodComponent
   ],
   /**
    * Import Angular's modules.
@@ -62,8 +87,10 @@ type StoreType = {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
+    BsDropdownModule.forRoot(),
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES)
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.

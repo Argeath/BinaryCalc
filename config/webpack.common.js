@@ -22,6 +22,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
 /**
  * Webpack Constants
@@ -62,6 +63,7 @@ module.exports = function (options) {
     entry: {
 
       'polyfills': './src/polyfills.browser.ts',
+      'twbs':      'bootstrap-loader',
       'main':      AOT ? './src/main.browser.aot.ts' :
                   './src/main.browser.ts'
 
@@ -175,6 +177,46 @@ module.exports = function (options) {
           test: /\.scss$/,
           use: ['to-string-loader', 'css-loader', 'sass-loader'],
           exclude: [helpers.root('src', 'styles')]
+        },
+        /*
+         * Sass loader (required for Bootstrap 4)
+         */
+        {
+          test: /\.css$/,
+          use: ['raw-loader'],
+          exclude: [helpers.root('src', 'styles')]
+        },
+
+        {
+          test: /\.scss$/,
+          use: ['raw-loader', 'sass-loader'],
+          exclude: [helpers.root('src', 'styles')]
+        },
+
+        {
+          test: /\.sass$/,
+          use: ['raw-loader', 'sass-loader'],
+          exclude: [helpers.root('src', 'styles')]
+        },
+
+        /*
+         * Bootstrap 4 loader
+         */
+        {
+          test: /bootstrap\/dist\/js\/umd\//,
+          use: 'imports-loader?jQuery=jquery'
+        },
+
+        /*
+         * Font loaders, required for font-awesome-sass-loader and bootstrap-loader
+         */
+        {
+          test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader: "url-loader?limit=10000&mimetype=application/font-woff"
+        },
+        {
+          test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader: "file-loader"
         },
 
         /**
@@ -392,6 +434,24 @@ module.exports = function (options) {
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
       new InlineManifestWebpackPlugin(),
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        "window.jQuery": "jquery",
+        Tether: "tether",
+        "window.Tether": "tether",
+        Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+        Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+        Button: "exports-loader?Button!bootstrap/js/dist/button",
+        Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+        Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+        Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+        Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+        Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+        Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+        Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+        Util: "exports-loader?Util!bootstrap/js/dist/util"
+      }),
     ],
 
     /**

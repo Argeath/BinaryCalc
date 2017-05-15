@@ -1,0 +1,192 @@
+<header class="header">
+  <h1>Color conversion</h1>
+  <h3>Color converter - RGB(CSS style or Hex), CMYK, HSV, HSL conversions.</h3>
+</header>
+
+<section class="primary-bg">
+  <div class="input-box input-group">
+    <input class="form-control" placeholder="Your Value (eg. 'rgb(0, 67, 255)', '#0022FF', 'hsl()', CMYK)" [ngModel]="value" (ngModelChange)="OnValueChanged($event)"/>
+    <div class="input-group-btn">
+      <span class="input-group-addon">{{system >= 0 ? systems[system].name : "detect"}}</span>
+    </div>
+    <div class="input-group-btn" dropdown>
+      <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
+        <span class="caret"></span>
+      </button>
+      <ul *dropdownMenu role="menu" aria-labelledby="single-button" class="dropdown-menu dropdown-menu-right">
+        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i)">{{s.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-error *ngIf="value.length > 0" [error]="error"></app-error>
+
+  <div class="row" *ngIf="valid && !error">
+    <app-result class="col-md-6 col-md-offset-1" [results]="results" [customSystems]="systems"></app-result>
+    <div class="col-md-2 col-md-offset-1 color" [ngStyle]="{'background-color': results[0]}"></div>
+  </div>
+</section>
+
+<app-info [title]="'Color names'">
+  <table class="color-palette">
+    <tr style="background-color: #CD5C5C; border-color: #CD5C5C; color: #CD5C5C"><th>IndianRed</th><td>#CD5C5C</td></tr>
+    <tr style="background-color: #F08080; border-color: #F08080; color: #F08080"><th>LightCoral</th><td>#F08080</td></tr>
+    <tr style="background-color: #FA8072; border-color: #FA8072; color: #FA8072"><th>Salmon</th><td>#FA8072</td></tr>
+    <tr style="background-color: #E9967A; border-color: #E9967A; color: #E9967A"><th>DarkSalmon</th><td>#E9967A</td></tr>
+    <tr style="background-color: #FFA07A; border-color: #FFA07A; color: #FFA07A"><th>LightSalmon</th><td>#FFA07A</td></tr>
+    <tr style="background-color: #DC143C; border-color: #DC143C; color: #DC143C"><th>Crimson</th><td>#DC143C</td></tr>
+    <tr style="background-color: #FF0000; border-color: #FF0000; color: #FF0000"><th>Red</th><td>#FF0000</td></tr>
+    <tr style="background-color: #B22222; border-color: #B22222; color: #B22222"><th>FireBrick</th><td>#B22222</td></tr>
+    <tr style="background-color: #8B0000; border-color: #8B0000; color: #8B0000"><th>DarkRed</th><td>#8B0000</td></tr>
+    <tr style="background-color: #FFC0CB; border-color: #FFC0CB; color: #FFC0CB"><th>Pink</th><td>#FFC0CB</td></tr>
+    <tr style="background-color: #FFB6C1; border-color: #FFB6C1; color: #FFB6C1"><th>LightPink</th><td>#FFB6C1</td></tr>
+    <tr style="background-color: #FF69B4; border-color: #FF69B4; color: #FF69B4"><th>HotPink</th><td>#FF69B4</td></tr>
+    <tr style="background-color: #FF1493; border-color: #FF1493; color: #FF1493"><th>DeepPink</th><td>#FF1493</td></tr>
+    <tr style="background-color: #C71585; border-color: #C71585; color: #C71585"><th>MediumVioletRed</th><td>#C71585</td></tr>
+    <tr style="background-color: #DB7093; border-color: #DB7093; color: #DB7093"><th>PaleVioletRed</th><td>#DB7093</td></tr>
+    <tr style="background-color: #FFA07A; border-color: #FFA07A; color: #FFA07A"><th>LightSalmon</th><td>#FFA07A</td></tr>
+    <tr style="background-color: #FF7F50; border-color: #FF7F50; color: #FF7F50"><th>Coral</th><td>#FF7F50</td></tr>
+    <tr style="background-color: #FF6347; border-color: #FF6347; color: #FF6347"><th>Tomato</th><td>#FF6347</td></tr>
+    <tr style="background-color: #FF4500; border-color: #FF4500; color: #FF4500"><th>OrangeRed</th><td>#FF4500</td></tr>
+    <tr style="background-color: #FF8C00; border-color: #FF8C00; color: #FF8C00"><th>DarkOrange</th><td>#FF8C00</td></tr>
+    <tr style="background-color: #FFA500; border-color: #FFA500; color: #FFA500"><th>Orange</th><td>#FFA500</td></tr>
+    <tr style="background-color: #FFD700; border-color: #FFD700; color: #FFD700"><th>Gold</th><td>#FFD700</td></tr>
+    <tr style="background-color: #FFFF00; border-color: #FFFF00; color: #FFFF00"><th>Yellow</th><td>#FFFF00</td></tr>
+    <tr style="background-color: #FFFFE0; border-color: #FFFFE0; color: #FFFFE0"><th>LightYellow</th><td>#FFFFE0</td></tr>
+    <tr style="background-color: #FFFACD; border-color: #FFFACD; color: #FFFACD"><th>LemonChiffon</th><td>#FFFACD</td></tr>
+    <tr style="background-color: #FAFAD2; border-color: #FAFAD2; color: #FAFAD2"><th>LightGoldenrodYellow</th><td>#FAFAD2</td></tr>
+    <tr style="background-color: #FFEFD5; border-color: #FFEFD5; color: #FFEFD5"><th>PapayaWhip</th><td>#FFEFD5</td></tr>
+    <tr style="background-color: #FFE4B5; border-color: #FFE4B5; color: #FFE4B5"><th>Moccasin</th><td>#FFE4B5</td></tr>
+    <tr style="background-color: #FFDAB9; border-color: #FFDAB9; color: #FFDAB9"><th>PeachPuff</th><td>#FFDAB9</td></tr>
+    <tr style="background-color: #EEE8AA; border-color: #EEE8AA; color: #EEE8AA"><th>PaleGoldenrod</th><td>#EEE8AA</td></tr>
+    <tr style="background-color: #F0E68C; border-color: #F0E68C; color: #F0E68C"><th>Khaki</th><td>#F0E68C</td></tr>
+    <tr style="background-color: #BDB76B; border-color: #BDB76B; color: #BDB76B"><th>DarkKhaki</th><td>#BDB76B</td></tr>
+    <tr style="background-color: #E6E6FA; border-color: #E6E6FA; color: #E6E6FA"><th>Lavender</th><td>#E6E6FA</td></tr>
+    <tr style="background-color: #D8BFD8; border-color: #D8BFD8; color: #D8BFD8"><th>Thistle</th><td>#D8BFD8</td></tr>
+    <tr style="background-color: #DDA0DD; border-color: #DDA0DD; color: #DDA0DD"><th>Plum</th><td>#DDA0DD</td></tr>
+    <tr style="background-color: #EE82EE; border-color: #EE82EE; color: #EE82EE"><th>Violet</th><td>#EE82EE</td></tr>
+    <tr style="background-color: #DA70D6; border-color: #DA70D6; color: #DA70D6"><th>Orchid</th><td>#DA70D6</td></tr>
+    <tr style="background-color: #FF00FF; border-color: #FF00FF; color: #FF00FF"><th>Fuchsia</th><td>#FF00FF</td></tr>
+    <tr style="background-color: #FF00FF; border-color: #FF00FF; color: #FF00FF"><th>Magenta</th><td>#FF00FF</td></tr>
+    <tr style="background-color: #BA55D3; border-color: #BA55D3; color: #BA55D3"><th>MediumOrchid</th><td>#BA55D3</td></tr>
+    <tr style="background-color: #9370DB; border-color: #9370DB; color: #9370DB"><th>MediumPurple</th><td>#9370DB</td></tr>
+    <tr style="background-color: #9966CC; border-color: #9966CC; color: #9966CC"><th>Amethyst</th><td>#9966CC</td></tr>
+    <tr style="background-color: #8A2BE2; border-color: #8A2BE2; color: #8A2BE2"><th>BlueViolet</th><td>#8A2BE2</td></tr>
+    <tr style="background-color: #9400D3; border-color: #9400D3; color: #9400D3"><th>DarkViolet</th><td>#9400D3</td></tr>
+    <tr style="background-color: #9932CC; border-color: #9932CC; color: #9932CC"><th>DarkOrchid</th><td>#9932CC</td></tr>
+    <tr style="background-color: #8B008B; border-color: #8B008B; color: #8B008B"><th>DarkMagenta</th><td>#8B008B</td></tr>
+    <tr style="background-color: #800080; border-color: #800080; color: #800080"><th>Purple</th><td>#800080</td></tr>
+    <tr style="background-color: #4B0082; border-color: #4B0082; color: #4B0082"><th>Indigo</th><td>#4B0082</td></tr>
+    <tr style="background-color: #6A5ACD; border-color: #6A5ACD; color: #6A5ACD"><th>SlateBlue</th><td>#6A5ACD</td></tr>
+    <tr style="background-color: #483D8B; border-color: #483D8B; color: #483D8B"><th>DarkSlateBlue</th><td>#483D8B</td></tr>
+    <tr style="background-color: #7B68EE; border-color: #7B68EE; color: #7B68EE"><th>MediumSlateBlue</th><td>#7B68EE</td></tr>
+    <tr style="background-color: #ADFF2F; border-color: #ADFF2F; color: #ADFF2F"><th>GreenYellow</th><td>#ADFF2F</td></tr>
+    <tr style="background-color: #7FFF00; border-color: #7FFF00; color: #7FFF00"><th>Chartreuse</th><td>#7FFF00</td></tr>
+    <tr style="background-color: #7CFC00; border-color: #7CFC00; color: #7CFC00"><th>LawnGreen</th><td>#7CFC00</td></tr>
+    <tr style="background-color: #00FF00; border-color: #00FF00; color: #00FF00"><th>Lime</th><td>#00FF00</td></tr>
+    <tr style="background-color: #32CD32; border-color: #32CD32; color: #32CD32"><th>LimeGreen</th><td>#32CD32</td></tr>
+    <tr style="background-color: #98FB98; border-color: #98FB98; color: #98FB98"><th>PaleGreen</th><td>#98FB98</td></tr>
+    <tr style="background-color: #90EE90; border-color: #90EE90; color: #90EE90"><th>LightGreen</th><td>#90EE90</td></tr>
+    <tr style="background-color: #00FA9A; border-color: #00FA9A; color: #00FA9A"><th>MediumSpringGreen</th><td>#00FA9A</td></tr>
+    <tr style="background-color: #00FF7F; border-color: #00FF7F; color: #00FF7F"><th>SpringGreen</th><td>#00FF7F</td></tr>
+    <tr style="background-color: #3CB371; border-color: #3CB371; color: #3CB371"><th>MediumSeaGreen</th><td>#3CB371</td></tr>
+    <tr style="background-color: #2E8B57; border-color: #2E8B57; color: #2E8B57"><th>SeaGreen</th><td>#2E8B57</td></tr>
+    <tr style="background-color: #228B22; border-color: #228B22; color: #228B22"><th>ForestGreen</th><td>#228B22</td></tr>
+    <tr style="background-color: #800000; border-color: #800000; color: #800000"><th>Green</th><td>#800000</td></tr>
+    <tr style="background-color: #640000; border-color: #640000; color: #640000"><th>DarkGreen</th><td>#640000</td></tr>
+    <tr style="background-color: #9ACD32; border-color: #9ACD32; color: #9ACD32"><th>YellowGreen</th><td>#9ACD32</td></tr>
+    <tr style="background-color: #6B8E23; border-color: #6B8E23; color: #6B8E23"><th>OliveDrab</th><td>#6B8E23</td></tr>
+    <tr style="background-color: #808000; border-color: #808000; color: #808000"><th>Olive</th><td>#808000</td></tr>
+    <tr style="background-color: #556B2F; border-color: #556B2F; color: #556B2F"><th>DarkOliveGreen</th><td>#556B2F</td></tr>
+    <tr style="background-color: #66CDAA; border-color: #66CDAA; color: #66CDAA"><th>MediumAquamarine</th><td>#66CDAA</td></tr>
+    <tr style="background-color: #8FBC8F; border-color: #8FBC8F; color: #8FBC8F"><th>DarkSeaGreen</th><td>#8FBC8F</td></tr>
+    <tr style="background-color: #20B2AA; border-color: #20B2AA; color: #20B2AA"><th>LightSeaGreen</th><td>#20B2AA</td></tr>
+    <tr style="background-color: #008B8B; border-color: #008B8B; color: #008B8B"><th>DarkCyan</th><td>#008B8B</td></tr>
+    <tr style="background-color: #808000; border-color: #808000; color: #808000"><th>Teal</th><td>#808000</td></tr>
+    <tr style="background-color: #00FFFF; border-color: #00FFFF; color: #00FFFF"><th>Aqua</th><td>#00FFFF</td></tr>
+    <tr style="background-color: #00FFFF; border-color: #00FFFF; color: #00FFFF"><th>Cyan</th><td>#00FFFF</td></tr>
+    <tr style="background-color: #E0FFFF; border-color: #E0FFFF; color: #E0FFFF"><th>LightCyan</th><td>#E0FFFF</td></tr>
+    <tr style="background-color: #AFEEEE; border-color: #AFEEEE; color: #AFEEEE"><th>PaleTurquoise</th><td>#AFEEEE</td></tr>
+    <tr style="background-color: #7FFFD4; border-color: #7FFFD4; color: #7FFFD4"><th>Aquamarine</th><td>#7FFFD4</td></tr>
+    <tr style="background-color: #40E0D0; border-color: #40E0D0; color: #40E0D0"><th>Turquoise</th><td>#40E0D0</td></tr>
+    <tr style="background-color: #48D1CC; border-color: #48D1CC; color: #48D1CC"><th>MediumTurquoise</th><td>#48D1CC</td></tr>
+    <tr style="background-color: #00CED1; border-color: #00CED1; color: #00CED1"><th>DarkTurquoise</th><td>#00CED1</td></tr>
+    <tr style="background-color: #5F9EA0; border-color: #5F9EA0; color: #5F9EA0"><th>CadetBlue</th><td>#5F9EA0</td></tr>
+    <tr style="background-color: #4682B4; border-color: #4682B4; color: #4682B4"><th>SteelBlue</th><td>#4682B4</td></tr>
+    <tr style="background-color: #B0C4DE; border-color: #B0C4DE; color: #B0C4DE"><th>LightSteelBlue</th><td>#B0C4DE</td></tr>
+    <tr style="background-color: #B0E0E6; border-color: #B0E0E6; color: #B0E0E6"><th>PowderBlue</th><td>#B0E0E6</td></tr>
+    <tr style="background-color: #ADD8E6; border-color: #ADD8E6; color: #ADD8E6"><th>LightBlue</th><td>#ADD8E6</td></tr>
+    <tr style="background-color: #87CEEB; border-color: #87CEEB; color: #87CEEB"><th>SkyBlue</th><td>#87CEEB</td></tr>
+    <tr style="background-color: #87CEFA; border-color: #87CEFA; color: #87CEFA"><th>LightSkyBlue</th><td>#87CEFA</td></tr>
+    <tr style="background-color: #00BFFF; border-color: #00BFFF; color: #00BFFF"><th>DeepSkyBlue</th><td>#00BFFF</td></tr>
+    <tr style="background-color: #1E90FF; border-color: #1E90FF; color: #1E90FF"><th>DodgerBlue</th><td>#1E90FF</td></tr>
+    <tr style="background-color: #6495ED; border-color: #6495ED; color: #6495ED"><th>CornflowerBlue</th><td>#6495ED</td></tr>
+    <tr style="background-color: #7B68EE; border-color: #7B68EE; color: #7B68EE"><th>MediumSlateBlue</th><td>#7B68EE</td></tr>
+    <tr style="background-color: #416900; border-color: #416900; color: #416900"><th>RoyalBlue</th><td>#416900</td></tr>
+    <tr style="background-color: #0000FF; border-color: #0000FF; color: #0000FF"><th>Blue</th><td>#0000FF</td></tr>
+    <tr style="background-color: #0000CD; border-color: #0000CD; color: #0000CD"><th>MediumBlue</th><td>#0000CD</td></tr>
+    <tr style="background-color: #00008B; border-color: #00008B; color: #00008B"><th>DarkBlue</th><td>#00008B</td></tr>
+    <tr style="background-color: #800000; border-color: #800000; color: #800000"><th>Navy</th><td>#000</td></tr>
+    <tr style="background-color: #191970; border-color: #191970; color: #191970"><th>MidnightBlue</th><td>#191970</td></tr>
+    <tr style="background-color: #FFF8DC; border-color: #FFF8DC; color: #FFF8DC"><th>Cornsilk</th><td>#FFF8DC</td></tr>
+    <tr style="background-color: #FFEBCD; border-color: #FFEBCD; color: #FFEBCD"><th>BlanchedAlmond</th><td>#FFEBCD</td></tr>
+    <tr style="background-color: #FFE4C4; border-color: #FFE4C4; color: #FFE4C4"><th>Bisque</th><td>#FFE4C4</td></tr>
+    <tr style="background-color: #FFDEAD; border-color: #FFDEAD; color: #FFDEAD"><th>NavajoWhite</th><td>#FFDEAD</td></tr>
+    <tr style="background-color: #F5DEB3; border-color: #F5DEB3; color: #F5DEB3"><th>Wheat</th><td>#F5DEB3</td></tr>
+    <tr style="background-color: #DEB887; border-color: #DEB887; color: #DEB887"><th>BurlyWood</th><td>#DEB887</td></tr>
+    <tr style="background-color: #D2B48C; border-color: #D2B48C; color: #D2B48C"><th>Tan</th><td>#D2B48C</td></tr>
+    <tr style="background-color: #BC8F8F; border-color: #BC8F8F; color: #BC8F8F"><th>RosyBrown</th><td>#BC8F8F</td></tr>
+    <tr style="background-color: #F4A460; border-color: #F4A460; color: #F4A460"><th>SandyBrown</th><td>#F4A460</td></tr>
+    <tr style="background-color: #DAA520; border-color: #DAA520; color: #DAA520"><th>Goldenrod</th><td>#DAA520</td></tr>
+    <tr style="background-color: #B8860B; border-color: #B8860B; color: #B8860B"><th>DarkGoldenrod</th><td>#B8860B</td></tr>
+    <tr style="background-color: #CD853F; border-color: #CD853F; color: #CD853F"><th>Peru</th><td>#CD853F</td></tr>
+    <tr style="background-color: #D2691E; border-color: #D2691E; color: #D2691E"><th>Chocolate</th><td>#D2691E</td></tr>
+    <tr style="background-color: #8B4513; border-color: #8B4513; color: #8B4513"><th>SaddleBrown</th><td>#8B4513</td></tr>
+    <tr style="background-color: #A0522D; border-color: #A0522D; color: #A0522D"><th>Sienna</th><td>#A0522D</td></tr>
+    <tr style="background-color: #A52A2A; border-color: #A52A2A; color: #A52A2A"><th>Brown</th><td>#A52A2A</td></tr>
+    <tr style="background-color: #800000; border-color: #800000; color: #800000"><th>Maroon</th><td>#800000</td></tr>
+    <tr style="background-color: #FFFFFF; border-color: #FFFFFF; color: #FFFFFF"><th>White</th><td>#FFFFFF</td></tr>
+    <tr style="background-color: #FFFAFA; border-color: #FFFAFA; color: #FFFAFA"><th>Snow</th><td>#FFFAFA</td></tr>
+    <tr style="background-color: #F0FFF0; border-color: #F0FFF0; color: #F0FFF0"><th>Honeydew</th><td>#F0FFF0</td></tr>
+    <tr style="background-color: #F5FFFA; border-color: #F5FFFA; color: #F5FFFA"><th>MintCream</th><td>#F5FFFA</td></tr>
+    <tr style="background-color: #F0FFFF; border-color: #F0FFFF; color: #F0FFFF"><th>Azure</th><td>#F0FFFF</td></tr>
+    <tr style="background-color: #F0F8FF; border-color: #F0F8FF; color: #F0F8FF"><th>AliceBlue</th><td>#F0F8FF</td></tr>
+    <tr style="background-color: #F8F8FF; border-color: #F8F8FF; color: #F8F8FF"><th>GhostWhite</th><td>#F8F8FF</td></tr>
+    <tr style="background-color: #F5F5F5; border-color: #F5F5F5; color: #F5F5F5"><th>WhiteSmoke</th><td>#F5F5F5</td></tr>
+    <tr style="background-color: #FFF5EE; border-color: #FFF5EE; color: #FFF5EE"><th>Seashell</th><td>#FFF5EE</td></tr>
+    <tr style="background-color: #F5F5DC; border-color: #F5F5DC; color: #F5F5DC"><th>Beige</th><td>#F5F5DC</td></tr>
+    <tr style="background-color: #FDF5E6; border-color: #FDF5E6; color: #FDF5E6"><th>OldLace</th><td>#FDF5E6</td></tr>
+    <tr style="background-color: #FFFAF0; border-color: #FFFAF0; color: #FFFAF0"><th>FloralWhite</th><td>#FFFAF0</td></tr>
+    <tr style="background-color: #FFFFF0; border-color: #FFFFF0; color: #FFFFF0"><th>Ivory</th><td>#FFFFF0</td></tr>
+    <tr style="background-color: #FAEBD7; border-color: #FAEBD7; color: #FAEBD7"><th>AntiqueWhite</th><td>#FAEBD7</td></tr>
+    <tr style="background-color: #FAF0E6; border-color: #FAF0E6; color: #FAF0E6"><th>Linen</th><td>#FAF0E6</td></tr>
+    <tr style="background-color: #FFF0F5; border-color: #FFF0F5; color: #FFF0F5"><th>LavenderBlush</th><td>#FFF0F5</td></tr>
+    <tr style="background-color: #FFE4E1; border-color: #FFE4E1; color: #FFE4E1"><th>MistyRose</th><td>#FFE4E1</td></tr>
+    <tr style="background-color: #DCDCDC; border-color: #DCDCDC; color: #DCDCDC"><th>Gainsboro</th><td>#DCDCDC</td></tr>
+    <tr style="background-color: #D3D3D3; border-color: #D3D3D3; color: #D3D3D3"><th>LightGrey</th><td>#D3D3D3</td></tr>
+    <tr style="background-color: #C0C0C0; border-color: #C0C0C0; color: #C0C0C0"><th>Silver</th><td>#C0C0C0</td></tr>
+    <tr style="background-color: #A9A9A9; border-color: #A9A9A9; color: #A9A9A9"><th>DarkGray</th><td>#A9A9A9</td></tr>
+    <tr style="background-color: #808080; border-color: #808080; color: #808080"><th>Gray</th><td>#808080</td></tr>
+    <tr style="background-color: #696969; border-color: #696969; color: #696969"><th>DimGray</th><td>#696969</td></tr>
+    <tr style="background-color: #778899; border-color: #778899; color: #778899"><th>LightSlateGray</th><td>#778899</td></tr>
+    <tr style="background-color: #708090; border-color: #708090; color: #708090"><th>SlateGray</th><td>#708090</td></tr>
+    <tr style="background-color: #2F4F4F; border-color: #2F4F4F; color: #2F4F4F"><th>DarkSlateGray</th><td>#2F4F4F</td></tr>
+    <tr style="background-color: #000000; border-color: #000000; color: #000000"><th>Black</th><td>#000000</td></tr>
+  </table>
+</app-info>
+
+<app-info [title]="'Color Scheme Generators'">
+  <h2>Adobe Color CC</h2>
+  <a href="https://color.adobe.com"><img src="/assets/img/adobecolor.png"/></a><br /><br />
+  This site has everything you'll need to generate a stunning palette or harmony from any base color.<br />
+  If you've got an account with Adobe, all the better, log in and save your generated palettes for later, or share them with other users.<br />
+  <br />
+  <h2>Coloors</h2>
+  <a href="https://coolors.co/"><img src="/assets/img/coolors.co.png"/></a><br /><br />
+  <i>The super fast color schemes generator!<br />
+    Create, save and share perfect palettes in seconds!</i><br />
+  <br />
+  It's really intuitive and easy to generate an awesome color palette.
+</app-info>
+
+<app-tag-cloud [tags]="tags"></app-tag-cloud>

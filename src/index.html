@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title><%= htmlWebpackPlugin.options.title %></title>
+  <meta name="description" content="Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp" />
+  <meta name="keywords" content="calculator, binary, numeral, base, system, converter, conversion, rgb, cmyk, hsl, arithmetic, operations, negative, number, roman, arabic, representation, unix, timestamp, time" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Dominik Kinal" />
 
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
+  <meta property="twitter:title" content="Binary Calculator - Numeral system conversions, RGB, CMYK, HSL">
+  <meta property="og:title" content="Binary Calculator - Numeral system conversions, RGB, CMYK, HSL">
+  <meta property="og:image" content="http://binary-calc.com/assets/logo.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://binary-calc.com">
+  <meta property="fb:app_id" content="284621538623018">
+  <meta property="og:description" content="Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp">
+
 
   <% if (webpackConfig.htmlElements.headTags) { %>
   <!-- Configured Head Tags  -->
@@ -17,6 +28,24 @@
   <!-- base url -->
   <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
 
+  <link rel="apple-touch-icon" sizes="57x57" href="http://binary-calc.com/assets/icon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="http://binary-calc.com/assets/icon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="http://binary-calc.com/assets/icon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="http://binary-calc.com/assets/icon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="http://binary-calc.com/assets/icon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="http://binary-calc.com/assets/icon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="http://binary-calc.com/assets/icon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="http://binary-calc.com/assets/icon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://binary-calc.com/assets/icon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="http://binary-calc.com/assets/icon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://binary-calc.com/assets/icon/iconicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="http://binary-calc.com/assets/icon/iconicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://binary-calc.com/assets/icon/iconicon-16x16.png">
+  <link rel="manifest" href="http://binary-calc.com/assets/icon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="http://binary-calc.com/assets/icon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
   <%= htmlWebpackPlugin.files.webpackManifest %>
 
 </head>
@@ -24,8 +53,41 @@
 <body>
 
   <app>
-    Loading...
+    <div class="container">
+      <header class="logo text-center">
+        <img src="https://c19y2fqn.cloudimg.io/s/cdn/x/http://binary-calc.com/assets/logo.png" width="150" height="150"/> <h1>Binary Calculator</h1>
+      </header>
+      <div class="spinner">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+      </div>
+    </div>
   </app>
+
+  <div id="fb-root"></div>
+
+  <script>
+    WebFontConfig = {
+      google: {
+        families: ['Roboto Mono']
+      }
+    };
+
+    (function(d) {
+      var wf = d.createElement('script'), s = d.scripts[0];
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+      wf.async = true;
+      s.parentNode.insertBefore(wf, s);
+    })(document);
+  </script>
+
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=284621538623018";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
 
   <!-- Google Analytics: change UA-71073175-1 to be your site's ID -->
   <script>
@@ -34,7 +96,7 @@
     r=n.getElementsByTagName(g)[0];a.async=1;a.src=u;r.parentNode.insertBefore(a,r)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-71073175-1', 'auto');
+    ga('create', 'UA-12606596-8', 'auto');
     ga('send', 'pageview');
   </script>
 
@@ -42,7 +104,5 @@
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>
-
-
 </body>
 </html>

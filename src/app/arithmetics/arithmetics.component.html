@@ -1,0 +1,134 @@
+<header class="header">
+  <h1>Arithmetic operations</h1>
+  <h3>Arithmetic operations (addition, subtraction, multiplication, division, modulus) of 2 numbers.</h3>
+</header>
+
+<section class="primary-bg">
+  <div class="input-box input-group">
+    <input class="form-control" placeholder="Your first Value" [(ngModel)]="value[0]" (ngModelChange)="valueChange(0)"/>
+    <div class="input-group-btn">
+      <span class="input-group-addon">({{systems[system[0]].nr}}) {{systems[system[0]].name}}</span>
+    </div>
+    <div class="input-group-btn" dropdown>
+      <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
+        <span class="caret"></span>
+      </button>
+      <ul *dropdownMenu role="menu" aria-labelledby="single-button" class="dropdown-menu dropdown-menu-right">
+        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i, 0)">({{s.nr}}) {{s.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="operation-box row">
+    <div class="col-md-4 col-md-offset-4">
+      <select class="form-control" placeholder="Operation" [ngModel]="operation" (ngModelChange)="operationSelected($event)">
+        <option value="add">+ (addition)</option>
+        <option value="sub">- (subtraction)</option>
+        <option value="mul">* (multiplication)</option>
+        <option value="div">/ (division)</option>
+        <option value="mod">% (modulus)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="input-box input-group">
+    <input class="form-control" placeholder="Your second Value" [(ngModel)]="value[1]" (ngModelChange)="valueChange(1)"/>
+    <div class="input-group-btn">
+      <span class="input-group-addon">({{systems[system[1]].nr}}) {{systems[system[1]].name}}</span>
+    </div>
+    <div class="input-group-btn" dropdown>
+      <button id="single-button2" type="button" class="btn btn-default" dropdownToggle>
+        <span class="caret"></span>
+      </button>
+      <ul *dropdownMenu role="menu" aria-labelledby="single-button2" class="dropdown-menu dropdown-menu-right">
+        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i, 1)">({{s.nr}}) {{s.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-error *ngIf="value[0].length > 0 && value[1].length > 0 && operation" [error]="error"></app-error>
+
+  <div class="row" *ngIf="value[0].length > 0 && value[1].length > 0 && operation && !error">
+    <app-result class="col-md-6 col-md-offset-3" [results]="results" [warningIf]="operation==='div'"
+                [warning]="'Warning: result is rounded downwards to an integer.'"></app-result>
+  </div>
+</section>
+
+<app-info [title]="'Binary addition'">
+  <b>Binary addition</b> is much like your normal everyday addition (decimal addition), except that it carries on a value of 2 instead of a value of 10.<br />
+  For example: in decimal addition, if you add 8 + 4 you get "12", which is 2 and carry = 1.<br />
+  Same thing happens in binary addition, if you add 1 + 1 you get "10" - which is 0 and carry = 1.<br />
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>x</th>
+        <th>y</th>
+        <th>x + y</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>10 (0, carry = 1)</td>
+    </tr>
+    </tbody>
+  </table><br />
+
+  For example:<br />
+  <img src="https://c19y2fqn.cloudimg.io/s/cdn/x/http://binary-calc.com/assets/binary-addition.png" width="212" height="159" alt="Binary addition - example"/>
+</app-info>
+
+<app-info [title]="'Binary subtraction'">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>x</th>
+        <th>y</th>
+        <th>x - y</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>1 (from carry)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    </tbody>
+  </table><br />
+
+  For example:<br />
+  <img src="https://c19y2fqn.cloudimg.io/s/cdn/x/http://binary-calc.com/assets/binary-subtraction.png" width="212" height="159" alt="Binary subtraction - example"/>
+</app-info>
+
+<app-tag-cloud [tags]="tags"></app-tag-cloud>

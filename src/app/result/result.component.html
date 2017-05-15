@@ -1,0 +1,19 @@
+<div class="alert alert-success">
+  <div class="header">
+    <h3>{{title}}</h3>
+  </div>
+
+  <app-error *ngIf="error" [error]="error"></app-error>
+
+  <div class="content">
+    <table class="data-table" *ngIf="!single">
+      <tr *ngFor="let v of results; let i = index">
+        <th>{{systems[i].name}}</th>
+        <td class="courier">{{v}}<span *ngIf="systems[i].nr && i!=2" class="nrs">({{systems[i].nr}})</span></td>
+      </tr>
+    </table>
+    <h4 *ngIf="single">{{result}}</h4>
+    <small *ngIf="warningIf">{{warning}}</small>
+    <div class="fb-share-button" data-href="http://binary-calc.com" data-layout="button" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbinary-calc.com%2F&amp;src=sdkpreparse">Share</a></div>
+  </div>
+</div>

@@ -2,18 +2,217 @@
 /* This file is for setting global styles  */
 @import 'variables';
 
-nav {
-  margin-top: 16px;
+$border-color: #dddfe0;
+
+html, body {
+  background-color: #DDD !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-nav a {
-  background-color: $nav-button-color;
-  color: white;
-  padding: 8px 16px;
-  margin: 8px;
-  vertical-align: middle;
-  line-height: 1.25;
+.full-width {
+  width: 100%;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.text-center {
   text-align: center;
-  text-decoration: none;
-  border-radius: 4px;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+header.header {
+  margin-top: 10px;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 16px;
+    color: #999;
+    margin-top: 5px;
+  }
+}
+
+app-result {
+  padding: 0 3px !important;
+
+  & > .alert {
+    margin: 10px 3px !important;
+  }
+}
+
+.data-table {
+  display: inline-table;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid $border-color;
+  background-color: transparent;
+  margin: 6px;
+
+  &.full-width {
+    margin: 0;
+  }
+
+  th {
+    padding: 5px 15px;
+    background: #f5f5f5;
+    font-weight: 800;
+    border: 1px solid $border-color;
+    color: #827717;
+  }
+
+  td {
+    padding: 5px;
+    background: #FFF;
+    border: 1px solid $border-color;
+    text-align: center;
+  }
+}
+
+.app-result.col-md-4 {
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+.info-box {
+  margin: 10px 5px;
+  border-radius: 5px;
+  text-align: left;
+  background-color: #d9edf7;
+  border: 1px #bcdff1;
+  color: #31708f;
+  padding: 0 0 15px;
+
+  & > .header {
+    display: inline-block;
+    border-bottom-right-radius: 5px;
+    border-right: 1px solid #bcdff1;
+    border-bottom: 1px solid #bcdff1;
+    font-size: 11px;
+    padding: 4px 20px;
+    text-align: left;
+    text-transform: uppercase;
+
+    h3 {
+      margin: 3px 0;
+      letter-spacing: 2px;
+      font-size: 13px;
+    }
+  }
+
+  & > .content {
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+.input-box {
+  .input-group-addon {
+    padding: 9px 12px;
+  }
+}
+
+.courier {
+  font-family: "Roboto Mono", "Helvetica Neue", sans-serif;
+  font-weight: 300;
+}
+
+.nrs {
+  font-size: 9px;
+  vertical-align: sub;
+}
+
+.primary-bg {
+  background: #f0f4c3;
+
+  @media (min-width: 601px) {
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 24px;
+  }
+
+  @media (max-width: 600px) {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 16px;
+  }
+}
+
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+
+  .cube1, .cube2 {
+    background-color: #333;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+    animation: sk-cubemove 1.8s infinite ease-in-out;
+  }
+
+  .cube2 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+  }
+
+  @-webkit-keyframes sk-cubemove {
+    25% {
+      -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+    }
+
+    50% {
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+    }
+
+    75% {
+      -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    }
+
+    100% {
+      -webkit-transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes sk-cubemove {
+    25% {
+      transform: translateX(42px) rotate(-90deg) scale(0.5);
+      -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+    }
+
+    50% {
+      transform: translateX(42px) translateY(42px) rotate(-179deg);
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+    }
+
+    50.1% {
+      transform: translateX(42px) translateY(42px) rotate(-180deg);
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+    }
+
+    75% {
+      transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+      -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    }
+
+    100% {
+      transform: rotate(-360deg);
+      -webkit-transform: rotate(-360deg);
+    }
+  }
 }

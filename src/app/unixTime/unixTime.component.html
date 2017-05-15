@@ -1,0 +1,33 @@
+<header class="header">
+  <h1>Unix Timestamp</h1>
+  <h3><b>Unix time</b> (also known as <b>POSIX time</b> or <b>epoch time</b>) is a system for describing instants in time, defined as the <b>number of seconds</b> that have elapsed since <b>00:00:00 Coordinated Universal Time (UTC), Thursday, 1 January 1970</b>, not counting leap seconds.</h3>
+</header>
+
+<app-info [title]="'Current timestamp'">
+  <p id="currentTimestamp">{{ currentTimestampSeconds }}</p>
+  <p id="currentTimestamp2">{{ currentTimestamp | date: 'yyyy-MM-dd HH:mm:ss' }}</p>
+  <p id="currentTimestamp3">{{ currentTimestamp | date: 'dd.MM.yyyy HH:mm:ss' }}</p>
+</app-info>
+
+<section class="primary-bg">
+  <div class="input-box input-group">
+    <input class="form-control" placeholder="Your Timestamp or Human date" [(ngModel)]="value" (ngModelChange)="valueChange()"/>
+    <div class="input-group-btn">
+      <span class="input-group-addon">{{system >= 0 ? systems[system].name : "detect"}}</span>
+    </div>
+    <div class="input-group-btn" dropdown>
+      <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
+        <span class="caret"></span>
+      </button>
+      <ul *dropdownMenu role="menu" aria-labelledby="single-button" class="dropdown-menu dropdown-menu-right">
+        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i)">{{s.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-error *ngIf="value.length > 0" [error]="error"></app-error>
+
+  <div class="row" *ngIf="value.length > 0 && !error">
+    <app-result class="col-md-8 col-md-offset-2" [results]="results" [customSystems]="systems"></app-result>
+  </div>
+</section>
