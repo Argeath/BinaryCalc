@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ConversionsService} from '../conversions.service';
-import {MetaDataService} from "../meta-data.service";
-let bigInt = require('big-integer');
+import { Component, OnInit } from '@angular/core';
+import { ConversionsService } from '../conversions.service';
+import { MetaDataService } from '../meta-data.service';
+var bigInt = require('big-integer');
 
 @Component({
   selector: 'app-arithmetics',
@@ -87,12 +87,12 @@ export class ArithmeticsComponent implements OnInit {
       let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
       const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
-      if (isNaN(num1.value) || isNaN(num2.value)) {
+      if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
         this.error = 'Incorrect value for that number system.';
         return false;
       }
 
-      switch(this.operation) {
+      switch (this.operation) {
         case 'add':
           num1 = num1.add(num2);
           break;
@@ -111,7 +111,7 @@ export class ArithmeticsComponent implements OnInit {
       }
 
       this.results = [];
-      for(let i = 0; i < this.systems.length; i++) {
+      for (let i = 0; i < this.systems.length; i++) {
         let str = num1.toString(this.systems[i].nr);
         str = this.conversions.format(str, this.systems[i].nr);
         this.results[i] = str.toUpperCase();

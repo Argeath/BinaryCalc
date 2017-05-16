@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ConversionsService} from "../conversions.service";
-import {MetaDataService} from "../meta-data.service";
-let bigInt = require("big-integer");
+import {ConversionsService} from '../conversions.service';
+import {MetaDataService} from '../meta-data.service';
+let bigInt = require('big-integer');
 
 @Component({
   selector: 'app-binaries',
@@ -10,18 +10,18 @@ let bigInt = require("big-integer");
 })
 export class BinariesComponent implements OnInit {
 
-  value = ['', ''];
-  system = [0, 0];
-  systemManuallySelected = [false, false];
-  detectedSystem = [0, 0];
-  operation: string = '';
+  public value = ['', ''];
+  public system = [0, 0];
+  public systemManuallySelected = [false, false];
+  public detectedSystem = [0, 0];
+  public operation: string = '';
 
-  systems = [];
+  public systems = [];
 
-  results = [];
-  error: string = null;
+  public results = [];
+  public error: string = null;
 
-  tags = [
+  public tags = [
     'binary calculator',
     'binary operations',
     'binary AND',
@@ -42,7 +42,7 @@ export class BinariesComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.meta.title$.next("Binary Calculator - binary operations: AND, OR on any base");
+    this.meta.title$.next('Binary Calculator - binary operations: AND, OR on any base');
   }
 
   public systemSelected(newValue: number, num: number) {
@@ -51,12 +51,12 @@ export class BinariesComponent implements OnInit {
     this.valueChange(num);
   };
 
-  operationSelected(newValue: string) {
+  public operationSelected(newValue: string) {
     this.operation = newValue;
     this.valueChange();
   };
 
-  valueChange(index?: number) {
+  public valueChange(index?: number) {
     if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
@@ -66,14 +66,15 @@ export class BinariesComponent implements OnInit {
       }
 
       if (this.systemManuallySelected) {
-        if (!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
-          this.error = "Incorrect value for that number system.";
+        if (!this.conversions.validateSystem(this.value[index],
+              this.systems[this.system[index]].nr)) {
+          this.error = 'Incorrect value for that number system.';
           return false;
         }
       }
 
-      if (this.value[index] == "NaN") {
-        this.error = "Error";
+      if (this.value[index] === 'NaN') {
+        this.error = 'Error';
         return false;
       }
 
@@ -85,11 +86,11 @@ export class BinariesComponent implements OnInit {
       const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
       if (isNaN(num1.value) || isNaN(num2.value)) {
-        this.error = "Incorrect value for that number system.";
+        this.error = 'Incorrect value for that number system.';
         return false;
       }
 
-      switch(this.operation) {
+      switch (this.operation) {
         case 'and':
           num1 = num1.and(num2);
           break;
@@ -102,7 +103,7 @@ export class BinariesComponent implements OnInit {
       }
 
       this.results = [];
-      for(let i = 0; i < this.systems.length; i++) {
+      for (let i = 0; i < this.systems.length; i++) {
         let str = num1.toString(this.systems[i].nr);
         str = this.conversions.format(str, this.systems[i].nr);
         this.results[i] = str.toUpperCase();

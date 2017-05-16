@@ -62,7 +62,7 @@ export class ConversionsComponent implements OnInit {
 
   public systemSelected(newValue: number) {
     this.system = newValue;
-    this.systemManuallySelected = this.system != 0;
+    this.systemManuallySelected = this.system !== 0;
     this.valueChange();
   };
 
