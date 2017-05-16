@@ -24,28 +24,24 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { HomeComponent } from './home';
-import { AboutComponent } from './about';
-import { NoContentComponent } from './no-content';
-import { XLargeDirective } from './home/x-large';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {BsDropdownModule} from "ngx-bootstrap";
-import {ChmodComponent} from "./chmod/chmod.component";
-import {TagCloudComponent} from "./tag-cloud/tag-cloud.component";
-import {CopyClipboardDirective} from "./copy-clipboard.directive";
-import {UnixTimeComponent} from "./unixTime/unixTime.component";
-import {ColorsComponent} from "./colors/colors.component";
-import {InfoComponent} from "./info/info.component";
-import {ErrorComponent} from "./error/error.component";
-import {ResultComponent} from "./result/result.component";
-import {RomaniansComponent} from "./romanians/romanians.component";
-import {BinariesComponent} from "./binaries/binaries.component";
-import {ArithmeticsComponent} from "./arithmetics/arithmetics.component";
-import {NegativesComponent} from "./negatives/negatives.component";
-import {ConversionsComponent} from "./conversions/conversions.component";
-import {MenuComponent} from "./menu/menu.component";
+import {BsDropdownModule} from 'ngx-bootstrap';
+import {ChmodComponent} from './chmod/chmod.component';
+import {TagCloudComponent} from './tag-cloud/tag-cloud.component';
+import {CopyClipboardDirective} from './copy-clipboard.directive';
+import {UnixTimeComponent} from './unixTime/unixTime.component';
+import {ColorsComponent} from './colors/colors.component';
+import {InfoComponent} from './info/info.component';
+import {ErrorComponent} from './error/error.component';
+import {ResultComponent} from './result/result.component';
+import {RomaniansComponent} from './romanians/romanians.component';
+import {BinariesComponent} from './binaries/binaries.component';
+import {ArithmeticsComponent} from './arithmetics/arithmetics.component';
+import {NegativesComponent} from './negatives/negatives.component';
+import {ConversionsComponent} from './conversions/conversions.component';
+import {MenuComponent} from './menu/menu.component';
 
 // Application wide providers
 const APP_PROVIDERS = [

@@ -7,8 +7,6 @@ import {Component, Input} from '@angular/core';
 })
 export class InfoComponent {
 
-  @Input() title: string = 'info';
-
-  constructor() { }
+  @Input() public title: string = 'info';
 
 }

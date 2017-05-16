@@ -41,11 +41,11 @@ export class BinariesComponent implements OnInit {
     this.systems = conversions.systems;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.meta.title$.next("Binary Calculator - binary operations: AND, OR on any base");
   }
 
-  systemSelected(newValue: number, num: number) {
+  public systemSelected(newValue: number, num: number) {
     this.system[num] = newValue;
     this.systemManuallySelected[num] = true;
     this.valueChange(num);
@@ -57,7 +57,7 @@ export class BinariesComponent implements OnInit {
   };
 
   valueChange(index?: number) {
-    if(index !== null && index !== undefined) {
+    if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
       if (!this.systemManuallySelected[index]) {
@@ -65,14 +65,14 @@ export class BinariesComponent implements OnInit {
         this.system[index] = this.detectedSystem[index];
       }
 
-      if(this.systemManuallySelected) {
-        if(!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
+      if (this.systemManuallySelected) {
+        if (!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
           this.error = "Incorrect value for that number system.";
           return false;
         }
       }
 
-      if(this.value[index] == "NaN") {
+      if (this.value[index] == "NaN") {
         this.error = "Error";
         return false;
       }
@@ -84,7 +84,7 @@ export class BinariesComponent implements OnInit {
       let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
       const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
-      if(isNaN(num1.value) || isNaN(num2.value)) {
+      if (isNaN(num1.value) || isNaN(num2.value)) {
         this.error = "Incorrect value for that number system.";
         return false;
       }
@@ -107,7 +107,7 @@ export class BinariesComponent implements OnInit {
         str = this.conversions.format(str, this.systems[i].nr);
         this.results[i] = str.toUpperCase();
       }
-    } catch(e) {
+    } catch (e) {
       this.error = e;
     }
   }

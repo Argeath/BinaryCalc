@@ -10,18 +10,18 @@ let bigInt = require('big-integer');
 })
 export class ArithmeticsComponent implements OnInit {
 
-  value = ['', ''];
-  system = [0, 0];
-  systemManuallySelected = [false, false];
-  detectedSystem = [0, 0];
-  operation: string = '';
+  public value = ['', ''];
+  public system = [0, 0];
+  public systemManuallySelected = [false, false];
+  public detectedSystem = [0, 0];
+  public operation: string = '';
 
-  systems = [];
+  public systems = [];
 
-  results = [];
-  error: string = null;
+  public results = [];
+  public error: string = null;
 
-  tags = [
+  public tags = [
     'binary calculator',
     'arithmetic',
     'addition',
@@ -42,23 +42,24 @@ export class ArithmeticsComponent implements OnInit {
     this.systems = conversions.systems;
   }
 
-  ngOnInit(): void {
-    this.meta.title$.next("Binary Calculator - arithmetic operations: Addition, Subtraction, Modulus, Division on any base");
+  public ngOnInit(): void {
+    this.meta.title$.next('Binary Calculator - arithmetic operations: ' +
+      'Addition, Subtraction, Modulus, Division on any base');
   }
 
-  systemSelected(newValue: number, num: number) {
+  public systemSelected(newValue: number, num: number) {
     this.system[num] = newValue;
     this.systemManuallySelected[num] = true;
     this.valueChange(num);
   };
 
-  operationSelected(newValue: string) {
+  public operationSelected(newValue: string) {
     this.operation = newValue;
     this.valueChange();
   };
 
-  valueChange(index?: number) {
-    if(index !== null && index !== undefined) {
+  public valueChange(index?: number) {
+    if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
       if (!this.systemManuallySelected[index]) {
@@ -66,15 +67,16 @@ export class ArithmeticsComponent implements OnInit {
         this.system[index] = this.detectedSystem[index];
       }
 
-      if(this.systemManuallySelected) {
-        if(!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
-          this.error = "Incorrect value for that number system.";
+      if (this.systemManuallySelected) {
+        if (!this.conversions.validateSystem(this.value[index],
+                this.systems[this.system[index]].nr)) {
+          this.error = 'Incorrect value for that number system.';
           return false;
         }
       }
 
-      if(this.value[index] == "NaN") {
-        this.error = "Error";
+      if (this.value[index] === 'NaN') {
+        this.error = 'Error';
         return false;
       }
 
@@ -85,8 +87,8 @@ export class ArithmeticsComponent implements OnInit {
       let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
       const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
-      if(isNaN(num1.value) || isNaN(num2.value)) {
-        this.error = "Incorrect value for that number system.";
+      if (isNaN(num1.value) || isNaN(num2.value)) {
+        this.error = 'Incorrect value for that number system.';
         return false;
       }
 
@@ -114,7 +116,7 @@ export class ArithmeticsComponent implements OnInit {
         str = this.conversions.format(str, this.systems[i].nr);
         this.results[i] = str.toUpperCase();
       }
-    } catch(e) {
+    } catch (e) {
       this.error = e;
     }
   }

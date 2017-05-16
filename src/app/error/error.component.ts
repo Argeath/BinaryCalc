@@ -7,8 +7,6 @@ import {Component, Input} from '@angular/core';
 })
 export class ErrorComponent {
 
-  @Input() error: string = null;
-
-  constructor() { }
+  @Input() public error: string = null;
 
 }

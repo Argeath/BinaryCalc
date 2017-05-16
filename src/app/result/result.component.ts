@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ConversionsService} from "../conversions.service";
+import {ConversionsService} from '../conversions.service';
 
 @Component({
   selector: 'app-result',
@@ -8,23 +8,24 @@ import {ConversionsService} from "../conversions.service";
 })
 export class ResultComponent implements OnInit {
 
-  @Input() title: string = "Result";
-  @Input() results = [];
-  @Input() warningIf: boolean = false;
-  @Input() warning: string = '';
-  @Input() error: string = '';
-  @Input() single: boolean = false;
-  @Input() result = '';
-  @Input() customSystems = null;
+  @Input() public title: string = 'Result';
+  @Input() public results = [];
+  @Input() public warningIf: boolean = false;
+  @Input() public warning: string = '';
+  @Input() public error: string = '';
+  @Input() public single: boolean = false;
+  @Input() public result = '';
+  @Input() public customSystems = null;
 
-  systems = [];
+  public systems = [];
 
   constructor(public conversions: ConversionsService) {
     this.systems = conversions.systems;
   }
 
-  ngOnInit(): void {
-    if(this.customSystems != null)
+  public ngOnInit(): void {
+    if (this.customSystems != null) {
       this.systems = this.customSystems;
+    }
   }
 }

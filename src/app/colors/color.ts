@@ -20,7 +20,7 @@ export class Color {
   }
 
   fromRGB(r: number, g: number, b: number) {
-    if(r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
       this.valid = false;
       return false;
     }
@@ -77,8 +77,8 @@ export class Color {
     if (hue < 0) hue += 6;
     if (hue >= 6) hue -= 6;
     if (hue < 1) return (t2 - t1) * hue + t1;
-    else if(hue < 3) return t2;
-    else if(hue < 4) return (t2 - t1) * (4 - hue) + t1;
+    else if (hue < 3) return t2;
+    else if (hue < 4) return (t2 - t1) * (4 - hue) + t1;
     else return t1;
   }
 
@@ -183,15 +183,15 @@ export class Color {
 
   printHex() {
     let red = this.red.toString(16);
-    if(this.red < 16)
+    if (this.red < 16)
       red = '0' + red;
 
     let green = this.green.toString(16);
-    if(this.green < 16)
+    if (this.green < 16)
       green = '0' + green;
 
     let blue = this.blue.toString(16);
-    if(this.blue < 16)
+    if (this.blue < 16)
       blue = '0' + blue;
 
     return ('#' + red + green + blue).toUpperCase();

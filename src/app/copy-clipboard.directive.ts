@@ -11,10 +11,10 @@ import {
 })
 export class CopyClipboardDirective {
 
-  element: Node;
+  public element: Node;
 
-  @Input() copyClipboard: string;
-  @Output() onCopy = new EventEmitter();
+  @Input() public copyClipboard: string;
+  @Output() public onCopy = new EventEmitter();
 
   constructor(elm: ElementRef) {
     this.element = elm.nativeElement;

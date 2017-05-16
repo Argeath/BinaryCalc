@@ -30,7 +30,7 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const HMR = helpers.hasProcessFlag('hot');
 const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot');
 const METADATA = {
-  title: 'Angular2 Webpack Starter by @gdi2290 from @AngularClass',
+  title: 'Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: HMR

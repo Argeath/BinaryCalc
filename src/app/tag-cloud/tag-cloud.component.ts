@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {Location, LocationStrategy, PathLocationStrategy} from "@angular/common";
-import {ActivatedRoute} from "@angular/router";
+import { Component, Input } from '@angular/core';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tag-cloud',
@@ -11,11 +11,12 @@ import {ActivatedRoute} from "@angular/router";
 export class TagCloudComponent {
 
   @Input()
-  tags: string[] = [];
+  public tags: string[] = [];
 
-  constructor(private location: Location, private route:ActivatedRoute) {}
+  constructor(private location: Location, private route: ActivatedRoute) {}
 
   public getURL(tagname: string) {
-    return this.location.prepareExternalUrl(this.route.snapshot.url[0].path + "/" + tagname.replace(/ /g, '-'));
+    return this.location.prepareExternalUrl(this.route.snapshot.url[0].path +
+      '/' + tagname.replace(/ /g, '-'));
   }
 }
