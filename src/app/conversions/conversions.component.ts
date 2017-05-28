@@ -84,7 +84,7 @@ export class ConversionsComponent implements OnInit {
     this.error = null;
     try {
       let num = bigInt(this.value, this.systems[this.system].nr);
-      if (isNaN(num.value)) {
+      if (isNaN(num.valueOf())) {
         this.error = 'Incorrect value for that number system.';
         return false;
       }

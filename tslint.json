@@ -28,6 +28,7 @@
     "use-life-cycle-interface": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
+    "no-var-requires": false,
     // General
     "no-console": [true,
       "time",
