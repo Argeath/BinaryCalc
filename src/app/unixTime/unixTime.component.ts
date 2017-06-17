@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 // import * as moment from 'moment/moment';
-import { MetaDataService } from '../meta-data.service';
+import { MetaDataService } from '../services/meta-data.service';
 
 @Component({
   selector: 'app-unixTime',

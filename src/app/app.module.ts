@@ -22,15 +22,12 @@ import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 // App is our top level component
 import { AppComponent } from './app.component';
-import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-import { AppState, InternalStateType } from './app.service';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
 import {BsDropdownModule} from 'ngx-bootstrap';
 import {ChmodComponent} from './chmod/chmod.component';
 import {TagCloudComponent} from './tag-cloud/tag-cloud.component';
-import {CopyClipboardDirective} from './copy-clipboard.directive';
 import {UnixTimeComponent} from './unixTime/unixTime.component';
 import {ColorsComponent} from './colors/colors.component';
 import {InfoComponent} from './info/info.component';
@@ -45,12 +42,9 @@ import {MenuComponent} from './menu/menu.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
-  ...APP_RESOLVER_PROVIDERS,
-  AppState
 ];
 
 type StoreType = {
-  state: InternalStateType,
   restoreInputValues: () => void,
   disposeOldHosts: () => void
 };
@@ -73,7 +67,6 @@ type StoreType = {
     InfoComponent,
     ColorsComponent,
     UnixTimeComponent,
-    CopyClipboardDirective,
     TagCloudComponent,
     ChmodComponent
   ],
@@ -99,19 +92,14 @@ type StoreType = {
 export class AppModule {
 
   constructor(
-    public appRef: ApplicationRef,
-    public appState: AppState
+    public appRef: ApplicationRef
   ) {}
 
   public hmrOnInit(store: StoreType) {
-    if (!store || !store.state) {
+    if (!store) {
       return;
     }
     console.log('HMR store', JSON.stringify(store, null, 2));
-    /**
-     * Set state
-     */
-    this.appState._state = store.state;
     /**
      * Set input values
      */
@@ -121,17 +109,11 @@ export class AppModule {
     }
 
     this.appRef.tick();
-    delete store.state;
     delete store.restoreInputValues;
   }
 
   public hmrOnDestroy(store: StoreType) {
     const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement);
-    /**
-     * Save state
-     */
-    const state = this.appState._state;
-    store.state = state;
     /**
      * Recreate root elements
      */

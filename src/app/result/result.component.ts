@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ConversionsService} from '../conversions.service';
+import {ConversionsService} from '../services/conversions.service';
 
 @Component({
   selector: 'app-result',

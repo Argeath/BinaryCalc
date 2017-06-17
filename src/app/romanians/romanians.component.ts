@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ConversionsService} from "../conversions.service";
-import {MetaDataService} from "../meta-data.service";
+import {ConversionsService} from "../services/conversions.service";
+import {MetaDataService} from "../services/meta-data.service";
 let bigInt = require("big-integer");
 
 @Component({

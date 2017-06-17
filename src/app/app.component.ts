@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ConversionsService } from './conversions.service';
+import { ConversionsService } from './services/conversions.service';
 import { Title } from '@angular/platform-browser';
-import { MetaDataService } from './meta-data.service';
-import { AppState } from './app.service';
+import { MetaDataService } from './services/meta-data.service';
 
 @Component({
   selector: 'app',
@@ -21,8 +20,7 @@ export class AppComponent implements OnInit {
   public url = 'https://twitter.com/AngularClass';
 
   public constructor(private titleService: Title,
-                     private meta: MetaDataService,
-                     public appState: AppState) {
+                     private meta: MetaDataService) {
   }
 
   public ngOnInit(): void {
