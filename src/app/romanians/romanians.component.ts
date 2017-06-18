@@ -6,12 +6,12 @@ let bigInt = require("big-integer");
 @Component({
   selector: 'app-romanians',
   templateUrl: './romanians.component.html',
-  styleUrls: ['./romanians.component.sass']
+  styleUrls: ['./romanians.component.scss']
 })
 export class RomaniansComponent implements OnInit {
 
   public value: string = '';
-  system: number = -1;
+  system: number = 0;
   systemManuallySelected: boolean = false;
   detectedNumeral: number = -1;
 
@@ -42,11 +42,11 @@ export class RomaniansComponent implements OnInit {
   public systemSelected(newValue: number) {
     this.system = newValue;
     this.systemManuallySelected = this.system != -1;
-    this.valueChange();
+    this.valueChange(this.value);
   }
 
-  valueChange() {
-    this.value = this.value.trim();
+  valueChange(newValue: string) {
+    this.value = newValue.trim();
 
     if (!this.systemManuallySelected) {
       this.detectedNumeral = this.conversions.detectNumeral(this.value);

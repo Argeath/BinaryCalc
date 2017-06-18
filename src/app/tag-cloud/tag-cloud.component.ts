@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-tag-cloud',
   templateUrl: './tag-cloud.component.html',
-  styleUrls: ['./tag-cloud.component.sass'],
+  styleUrls: ['./tag-cloud.component.scss'],
   providers: [Location, {provide: LocationStrategy, useClass: PathLocationStrategy}]
 })
 export class TagCloudComponent {

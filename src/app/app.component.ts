@@ -6,7 +6,7 @@ import { MetaDataService } from './services/meta-data.service';
 @Component({
   selector: 'app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass'],
+  styleUrls: ['./app.component.scss'],
   providers: [
     ConversionsService,
     MetaDataService,

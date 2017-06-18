@@ -43,11 +43,11 @@ module.exports = {
     /**
      * <link> tags for a Web App Manifest
      */
-    { rel: 'manifest', href: '/assets/manifest.json' }
+    { rel: 'manifest', href: '/assets/icon/manifest.json' }
   ],
   meta: [
-    { name: 'msapplication-TileColor', content: '#00bcd4' },
+    { name: 'msapplication-TileColor', content: '#ffffff' },
     { name: 'msapplication-TileImage', content: '/assets/icon/ms-icon-144x144.png', '=content': true },
-    { name: 'theme-color', content: '#00bcd4' }
+    { name: 'theme-color', content: '#ffffff' }
   ]
 };

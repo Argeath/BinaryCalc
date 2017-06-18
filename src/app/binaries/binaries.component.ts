@@ -6,7 +6,7 @@ let bigInt = require('big-integer');
 @Component({
   selector: 'app-binaries',
   templateUrl: './binaries.component.html',
-  styleUrls: ['./binaries.component.sass']
+  styleUrls: ['./binaries.component.scss']
 })
 export class BinariesComponent implements OnInit {
 
@@ -14,7 +14,22 @@ export class BinariesComponent implements OnInit {
   public system = [0, 0];
   public systemManuallySelected = [false, false];
   public detectedSystem = [0, 0];
-  public operation: string = '';
+  public operation = null;
+
+  public operations = [
+    {
+      name: '& (AND)',
+      calculate: (num1, num2) => num1.and(num2)
+    },
+    {
+      name: '| (OR)',
+      calculate: (num1, num2) => num1.or(num2)
+    },
+    {
+      name: '^ (XOR)',
+      calculate: (num1, num2) => num1.xor(num2)
+    }
+  ];
 
   public systems = [];
 
@@ -45,13 +60,12 @@ export class BinariesComponent implements OnInit {
     this.meta.title$.next('Binary Calculator - binary operations: AND, OR on any base');
   }
 
-  public systemSelected(newValue: number, num: number) {
-    this.system[num] = newValue;
-    this.systemManuallySelected[num] = true;
-    this.valueChange(num);
-  };
+  public systemSelected(index: number) {
+    this.systemManuallySelected[index] = true;
+    this.valueChange(index);
+  }
 
-  public operationSelected(newValue: string) {
+  public operationSelected(newValue) {
     this.operation = newValue;
     this.valueChange();
   };
@@ -85,21 +99,13 @@ export class BinariesComponent implements OnInit {
       let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
       const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
-      if (isNaN(num1.value) || isNaN(num2.value)) {
+      if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
         this.error = 'Incorrect value for that number system.';
         return false;
       }
 
-      switch (this.operation) {
-        case 'and':
-          num1 = num1.and(num2);
-          break;
-        case 'or':
-          num1 = num1.or(num2);
-          break;
-        case 'xor':
-          num1 = num1.xor(num2);
-          break;
+      if(this.operation) {
+        num1 = this.operation.calculate(num1, num2);
       }
 
       this.results = [];

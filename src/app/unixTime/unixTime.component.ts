@@ -6,7 +6,7 @@ import { MetaDataService } from '../services/meta-data.service';
 @Component({
   selector: 'app-unixTime',
   templateUrl: './unixTime.component.html',
-  styleUrls: ['./unixTime.component.sass']
+  styleUrls: ['./unixTime.component.scss']
 })
 export class UnixTimeComponent implements OnDestroy, OnInit {
   public timer = null;

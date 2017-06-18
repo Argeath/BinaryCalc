@@ -7,7 +7,7 @@ import { MetaDataService } from '../services/meta-data.service';
 @Component({
   selector: 'app-colors',
   templateUrl: './colors.component.html',
-  styleUrls: ['./colors.component.sass']
+  styleUrls: ['./colors.component.scss']
 })
 export class ColorsComponent implements OnInit {
 

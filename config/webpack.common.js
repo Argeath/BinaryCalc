@@ -63,7 +63,6 @@ module.exports = function (options) {
     entry: {
 
       'polyfills': './src/polyfills.browser.ts',
-      'twbs':      'bootstrap-loader',
       'main':      AOT ? './src/main.browser.aot.ts' :
                   './src/main.browser.ts'
 
@@ -178,35 +177,6 @@ module.exports = function (options) {
           use: ['to-string-loader', 'css-loader', 'sass-loader'],
           exclude: [helpers.root('src', 'styles')]
         },
-        /*
-         * Sass loader (required for Bootstrap 4)
-         */
-        {
-          test: /\.css$/,
-          use: ['raw-loader'],
-          exclude: [helpers.root('src', 'styles')]
-        },
-
-        {
-          test: /\.scss$/,
-          use: ['raw-loader', 'sass-loader'],
-          exclude: [helpers.root('src', 'styles')]
-        },
-
-        {
-          test: /\.sass$/,
-          use: ['raw-loader', 'sass-loader'],
-          exclude: [helpers.root('src', 'styles')]
-        },
-
-        /*
-         * Bootstrap 4 loader
-         */
-        {
-          test: /bootstrap\/dist\/js\/umd\//,
-          use: 'imports-loader?jQuery=jquery'
-        },
-
         /*
          * Font loaders, required for font-awesome-sass-loader and bootstrap-loader
          */
@@ -439,18 +409,7 @@ module.exports = function (options) {
         jQuery: "jquery",
         "window.jQuery": "jquery",
         Tether: "tether",
-        "window.Tether": "tether",
-        Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
-        Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
-        Button: "exports-loader?Button!bootstrap/js/dist/button",
-        Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
-        Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
-        Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
-        Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
-        Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
-        Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
-        Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
-        Util: "exports-loader?Util!bootstrap/js/dist/util"
+        "window.Tether": "tether"
       }),
     ],
 

@@ -4,7 +4,7 @@ import {ConversionsService} from '../services/conversions.service';
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
-  styleUrls: ['./result.component.sass']
+  styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
 

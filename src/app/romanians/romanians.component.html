@@ -4,25 +4,12 @@
 </header>
 
 <section class="primary-bg">
-  <div class="input-box input-group">
-    <input class="form-control" placeholder="Your Value" [(ngModel)]="value" (ngModelChange)="valueChange()"/>
-    <div class="input-group-btn">
-      <span class="input-group-addon">{{system >= 0 ? systems[system].name : "detect"}}</span>
-    </div>
-    <div class="input-group-btn" dropdown>
-      <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
-        <span class="caret"></span>
-      </button>
-      <ul *dropdownMenu role="menu" aria-labelledby="single-button" class="dropdown-menu dropdown-menu-right">
-        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i)">{{s.name}}</a></li>
-      </ul>
-    </div>
-  </div>
+  <app-input-with-system [value]="value" (valueChanged)="valueChange($event)" [systems]="systems" [system]="system" (systemSelected)="systemSelected($event)"></app-input-with-system>
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>
 
-  <div class="row" *ngIf="value.length > 0 && !error">
-    <app-result class="col-md-4 col-md-offset-4" [single]="true" [result]="result"></app-result>
+  <div class="result-box row" *ngIf="value.length > 0 && !error">
+    <app-result [single]="true" [result]="result"></app-result>
   </div>
 </section>
 

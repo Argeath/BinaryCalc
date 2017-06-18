@@ -6,7 +6,7 @@ let bigInt = require('big-integer');
 @Component({
   selector: 'app-conversions',
   templateUrl: './conversions.component.html',
-  styleUrls: ['./conversions.component.sass']
+  styleUrls: ['./conversions.component.scss']
 })
 export class ConversionsComponent implements OnInit {
 
@@ -63,11 +63,11 @@ export class ConversionsComponent implements OnInit {
   public systemSelected(newValue: number) {
     this.system = newValue;
     this.systemManuallySelected = this.system !== 0;
-    this.valueChange();
+    this.valueChange(this.value);
   };
 
-  public valueChange() {
-    this.value = this.value.trim();
+  public valueChange(value: string) {
+    this.value = value.trim();
 
     if (!this.systemManuallySelected) {
       this.detectedSystem = this.conversions.detectSystem(this.value, true);

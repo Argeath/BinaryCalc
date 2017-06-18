@@ -6,7 +6,7 @@ var bigInt = require('big-integer');
 @Component({
   selector: 'app-arithmetics',
   templateUrl: './arithmetics.component.html',
-  styleUrls: ['./arithmetics.component.sass']
+  styleUrls: ['./arithmetics.component.scss']
 })
 export class ArithmeticsComponent implements OnInit {
 
@@ -14,8 +14,30 @@ export class ArithmeticsComponent implements OnInit {
   public system = [0, 0];
   public systemManuallySelected = [false, false];
   public detectedSystem = [0, 0];
-  public operation: string = '';
+  public operation = null;
 
+  public operations = [
+    {
+      name: '+ (addition)',
+      calculate: (num1, num2) => num1.add(num2)
+    },
+    {
+      name: '- (subtraction)',
+      calculate: (num1, num2) => num1.minus(num2)
+    },
+    {
+      name: '* (multiplication)',
+      calculate: (num1, num2) => num1.multiply(num2)
+    },
+    {
+      name: '/ (division)',
+      calculate: (num1, num2) => num1.divide(num2)
+    },
+    {
+      name: '% (modulus)',
+      calculate: (num1, num2) => num1.mod(num2)
+    }
+  ];
   public systems = [];
 
   public results = [];
@@ -53,7 +75,7 @@ export class ArithmeticsComponent implements OnInit {
     this.valueChange(num);
   };
 
-  public operationSelected(newValue: string) {
+  public operationSelected(newValue) {
     this.operation = newValue;
     this.valueChange();
   };
@@ -92,22 +114,8 @@ export class ArithmeticsComponent implements OnInit {
         return false;
       }
 
-      switch (this.operation) {
-        case 'add':
-          num1 = num1.add(num2);
-          break;
-        case 'sub':
-          num1 = num1.minus(num2);
-          break;
-        case 'mul':
-          num1 = num1.multiply(num2);
-          break;
-        case 'div':
-          num1 = num1.divide(num2);
-          break;
-        case 'mod':
-          num1 = num1.mod(num2);
-          break;
+      if(this.operation) {
+        num1 = this.operation.calculate(num1, num2);
       }
 
       this.results = [];

@@ -4,50 +4,23 @@
 </header>
 
 <section class="primary-bg">
-  <div class="input-box input-group">
-    <input class="form-control" placeholder="Your first Value" [(ngModel)]="value[0]" (ngModelChange)="valueChange(0)"/>
-    <div class="input-group-btn">
-      <span class="input-group-addon">({{systems[system[0]].nr}}) {{systems[system[0]].name}}</span>
-    </div>
-    <div class="input-group-btn" dropdown>
-      <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
-        <span class="caret"></span>
-      </button>
-      <ul *dropdownMenu role="menu" aria-labelledby="single-button" class="dropdown-menu dropdown-menu-right">
-        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i, 0)">({{s.nr}}) {{s.name}}</a></li>
-      </ul>
-    </div>
-  </div>
+  <app-input-with-system [(value)]="value[0]" (valueChange)="valueChange(0)" [systems]="systems" [(system)]="system[0]" (systemChange)="systemSelected(0)" [displaySystemNumber]="true"></app-input-with-system>
 
   <div class="operation-box row">
-    <div class="col-md-4 col-md-offset-4">
-      <select class="form-control" placeholder="Operation" [ngModel]="operation" (ngModelChange)="operationSelected($event)">
-        <option value="and">& (AND)</option>
-        <option value="or">| (OR)</option>
-        <option value="xor">^ (XOR)</option>
-      </select>
+    <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-warning" id="dropdownOperation" ngbDropdownToggle>{{operation ? operation.name : 'Choose operation'}}</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownOperation">
+        <button *ngFor="let o of operations" class="dropdown-item" (click)="operationSelected(o)">{{o.name}}</button>
+      </div>
     </div>
   </div>
 
-  <div class="input-box input-group">
-    <input class="form-control" placeholder="Your second Value" [(ngModel)]="value[1]" (ngModelChange)="valueChange(1)"/>
-    <div class="input-group-btn">
-      <span class="input-group-addon">({{systems[system[1]].nr}}) {{systems[system[1]].name}}</span>
-    </div>
-    <div class="input-group-btn" dropdown>
-      <button id="single-button2" type="button" class="btn btn-default" dropdownToggle>
-        <span class="caret"></span>
-      </button>
-      <ul *dropdownMenu role="menu" aria-labelledby="single-button2" class="dropdown-menu dropdown-menu-right">
-        <li *ngFor="let s of systems; let i = index"><a class="dropdown-item" (click)="systemSelected(i, 1)">({{s.nr}}) {{s.name}}</a></li>
-      </ul>
-    </div>
-  </div>
+  <app-input-with-system [(value)]="value[1]" (valueChange)="valueChange(1)" [systems]="systems" [(system)]="system[1]" (systemChange)="systemSelected(1)" [displaySystemNumber]="true"></app-input-with-system>
 
   <app-error *ngIf="value[0].length > 0 && value[1].length > 0 && operation" [error]="error"></app-error>
 
-  <div class="row" *ngIf="value[0].length > 0 && value[1].length > 0 && operation && !error">
-    <app-result class="col-md-6 col-md-offset-3" [results]="results"></app-result>
+  <div class="result-box row" *ngIf="value[0].length > 0 && value[1].length > 0 && operation && !error">
+    <app-result [results]="results"></app-result>
   </div>
 </section>
 

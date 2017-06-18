@@ -25,7 +25,6 @@ import { AppComponent } from './app.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {BsDropdownModule} from 'ngx-bootstrap';
 import {ChmodComponent} from './chmod/chmod.component';
 import {TagCloudComponent} from './tag-cloud/tag-cloud.component';
 import {UnixTimeComponent} from './unixTime/unixTime.component';
@@ -39,6 +38,8 @@ import {ArithmeticsComponent} from './arithmetics/arithmetics.component';
 import {NegativesComponent} from './negatives/negatives.component';
 import {ConversionsComponent} from './conversions/conversions.component';
 import {MenuComponent} from './menu/menu.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {InputWithSystemComponent} from "./inputWithSystem/inputWithSystem.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -68,7 +69,8 @@ type StoreType = {
     ColorsComponent,
     UnixTimeComponent,
     TagCloudComponent,
-    ChmodComponent
+    ChmodComponent,
+    InputWithSystemComponent
   ],
   /**
    * Import Angular's modules.
@@ -77,7 +79,7 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDropdownModule.forRoot(),
+    NgbModule.forRoot(),
     HttpModule,
     RouterModule.forRoot(ROUTES)
   ],

@@ -6,7 +6,7 @@ let bigInt = require("big-integer");
 @Component({
   selector: 'app-negatives',
   templateUrl: './negatives.component.html',
-  styleUrls: ['./negatives.component.sass']
+  styleUrls: ['./negatives.component.scss']
 })
 export class NegativesComponent implements OnInit {
 
@@ -109,11 +109,11 @@ export class NegativesComponent implements OnInit {
       }
     }
 
-    let dec = null;
+    let dec = bigInt(0);
     try {
       dec = bigInt(str, this.systems[this.system].nr);
 
-      if (isNaN(dec.value)) {
+      if (isNaN(dec.valueOf())) {
         this.error = 'Incorrect value for that number system.';
         return false;
       }
