@@ -4,18 +4,26 @@
 </header>
 
 <section class="primary-bg">
-  <app-input-with-system [(value)]="value[0]" (valueChange)="valueChange(0)" [systems]="systems" [(system)]="system[0]" (systemChange)="systemSelected(0)" [displaySystemNumber]="true"></app-input-with-system>
+  <app-input-with-system [(value)]="value[0]"
+                         (valueChange)="valueChange(0)"
+                         [systems]="systems"
+                         [(system)]="system[0]"
+                         (systemChange)="systemSelected(0)"
+                         [displaySystemNumber]="true">
+  </app-input-with-system>
 
-  <div class="operation-box row">
-    <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-warning" id="dropdownOperation" ngbDropdownToggle>{{operation ? operation.name : 'Choose operation'}}</button>
-      <div class="dropdown-menu" aria-labelledby="dropdownOperation">
-        <button *ngFor="let o of operations" class="dropdown-item" (click)="operationSelected(o)">{{o.name}}</button>
-      </div>
-    </div>
-  </div>
+  <app-operation-select [operations]="operations"
+                        [(operation)]="operation"
+                        (operationChange)="operationSelected($event)">
+  </app-operation-select>
 
-  <app-input-with-system [(value)]="value[1]" (valueChange)="valueChange(1)" [systems]="systems" [(system)]="system[1]" (systemChange)="systemSelected(1)" [displaySystemNumber]="true"></app-input-with-system>
+  <app-input-with-system [(value)]="value[1]"
+                         (valueChange)="valueChange(1)"
+                         [systems]="systems"
+                         [(system)]="system[1]"
+                         (systemChange)="systemSelected(1)"
+                         [displaySystemNumber]="true">
+  </app-input-with-system>
 
   <app-error *ngIf="value[0].length > 0 && value[1].length > 0 && operation" [error]="error"></app-error>
 

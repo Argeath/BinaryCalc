@@ -60,14 +60,13 @@ export class ConversionsComponent implements OnInit {
       'binary to decimal, hexadecimal, octal numerals');
   }
 
-  public systemSelected(newValue: number) {
-    this.system = newValue;
-    this.systemManuallySelected = this.system !== 0;
-    this.valueChange(this.value);
+  public systemSelected() {
+    this.systemManuallySelected = true;
+    this.valueChange();
   };
 
-  public valueChange(value: string) {
-    this.value = value.trim();
+  public valueChange() {
+    this.value = this.value.trim();
 
     if (!this.systemManuallySelected) {
       this.detectedSystem = this.conversions.detectSystem(this.value, true);

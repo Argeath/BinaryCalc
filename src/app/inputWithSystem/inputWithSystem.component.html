@@ -1,5 +1,16 @@
 <div class="input-box input-group">
-  <input class="form-control" placeholder="Your Value" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)"/>
+  <input class="form-control" placeholder="{{placeholder}}" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)"/>
+
+  <div class="input-group-btn" ngbDropdown *ngIf="hasBitSelect">
+    <button ngbDropdownToggle type="button" class="btn btn-secondary">
+      {{bits}} bits ({{bits/8}} bytes)
+      <span class="caret"></span>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-right">
+      <button *ngFor="let b of bitsArray" class="dropdown-item" (click)="bitsChange.emit(b)">{{b}} bits ({{b/8}} bytes)</button>
+    </div>
+  </div>
 
   <div class="input-group-btn" ngbDropdown>
     <button ngbDropdownToggle type="button" class="btn btn-secondary">
@@ -11,8 +22,8 @@
       <span class="caret"></span>
     </button>
 
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownManual">
-      <button *ngFor="let s of systems; let i = index" role="menuitem" class="dropdown-item" (click)="setSystem(i)">
+    <div class="dropdown-menu dropdown-menu-right">
+      <button *ngFor="let s of systems; let i = index" class="dropdown-item" (click)="setSystem(i)">
         <span *ngIf="displaySystemNumber">({{s.nr}})</span> {{s.name}}
       </button>
     </div>

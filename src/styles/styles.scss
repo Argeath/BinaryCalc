@@ -4,6 +4,7 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300');
 
 $border-color: #dddfe0;
 
@@ -35,14 +36,15 @@ header.header {
 
   h1 {
     font-size: 20px;
-    font-weight: 700;
+    font-weight: 500;
     margin: 0;
   }
 
   h3 {
-    font-size: 16px;
+    font-size: 15px;
     color: #999;
     margin-top: 5px;
+    font-weight: 400;
   }
 }
 
@@ -87,22 +89,8 @@ app-result {
   }
 }
 
-.app-result.col-md-4 {
-  padding-left: 3px !important;
-  padding-right: 3px !important;
-}
-
 .result-box {
   justify-content: center;
-}
-
-.operation-box {
-  margin: 15px 0;
-  justify-content: center;
-
-  .btn {
-    min-width: 170px;
-  }
 }
 
 .info-box {
@@ -134,12 +122,6 @@ app-result {
   & > .content {
     padding: 10px;
     text-align: center;
-  }
-}
-
-.input-box {
-  .input-group-addon {
-    padding: 9px 12px;
   }
 }
 

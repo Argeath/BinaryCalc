@@ -10,11 +10,19 @@ export class InputWithSystemComponent {
   @Input() value: string;
   @Input() system: number;
 
-  @Input() public systems;
-  @Input() public displaySystemNumber = false;
+  @Input() systems;
+  @Input() bitsArray: number[];
+  @Input() displaySystemNumber: boolean = false;
 
-  @Output() public valueChange = new EventEmitter<string>();
-  @Output() public systemChange = new EventEmitter<number>();
+  @Input() hasBitSelect: boolean = false;
+  @Input() bits: number;
+
+  @Input() placeholder: string = "Your value";
+
+
+  @Output() valueChange = new EventEmitter<string>();
+  @Output() systemChange = new EventEmitter<number>();
+  @Output() bitsChange = new EventEmitter<number>();
 
   setSystem(newSystem: number) {
     this.system = newSystem;

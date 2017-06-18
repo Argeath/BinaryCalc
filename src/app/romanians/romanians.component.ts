@@ -39,14 +39,13 @@ export class RomaniansComponent implements OnInit {
     this.meta.title$.next("Binary Calculator - Romanian numerals to Arabic converter");
   }
 
-  public systemSelected(newValue: number) {
-    this.system = newValue;
+  public systemSelected() {
     this.systemManuallySelected = this.system != -1;
-    this.valueChange(this.value);
+    this.valueChange();
   }
 
-  valueChange(newValue: string) {
-    this.value = newValue.trim();
+  valueChange() {
+    this.value = this.value.trim();
 
     if (!this.systemManuallySelected) {
       this.detectedNumeral = this.conversions.detectNumeral(this.value);

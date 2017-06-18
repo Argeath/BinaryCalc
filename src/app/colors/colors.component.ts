@@ -70,18 +70,19 @@ export class ColorsComponent implements OnInit {
       'RGB, hex, HSL, CMYK. Color palette');
   }
 
-  public systemSelected(newValue: number) {
-    this.system = newValue;
+  public systemSelected() {
     this.systemManuallySelected = this.system !== -1;
-    this.valueChange(this.value);
+    this.valueChange();
   }
 
   public OnValueChanged(text: string) {
     this.valueChanged.next(text);
   }
 
-  public valueChange(v: string) {
-    this.value = v;
+  public valueChange(newValue?: string) {
+    if(newValue)
+      this.value = newValue;
+
     this.valid = false;
     this.error = null;
     const vl = this.value.replace(/\s+/g, '').replace(/-/g, '').toUpperCase();

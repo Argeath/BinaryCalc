@@ -1,10 +1,17 @@
 <header class="header">
   <h1>Number systems conversion</h1>
-  <h3>In mathematical numeral systems the <b>base</b> or radix is usually the <b>number of unique digits</b>, including zero, that a positional numeral system uses to represent numbers.</h3>
+  <h3>In mathematical numeral systems the <b>base</b> or radix is usually the <b>number of unique digits</b>,
+    including zero, that a positional numeral system uses to represent numbers.</h3>
 </header>
 
 <section class="primary-bg">
-  <app-input-with-system [(value)]="value" (valueChanged)="valueChange($event)" [systems]="systems" [system]="system" (systemSelected)="systemSelected($event)" [displaySystemNumber]="true"></app-input-with-system>
+  <app-input-with-system [(value)]="value"
+                         (valueChange)="valueChange()"
+                         [systems]="systems"
+                         [(system)]="system"
+                         (systemChange)="systemSelected()"
+                         [displaySystemNumber]="true">
+  </app-input-with-system>
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>
 

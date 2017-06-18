@@ -4,7 +4,7 @@
 </header>
 
 <section class="primary-bg">
-  <app-input-with-system [value]="value" (valueChanged)="valueChange($event)" [systems]="systems" [system]="system" (systemSelected)="systemSelected($event)"></app-input-with-system>
+  <app-input-with-system [(value)]="value" (valueChange)="valueChange()" [systems]="systems" [(system)]="system" (systemChange)="systemSelected()"></app-input-with-system>
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>
 

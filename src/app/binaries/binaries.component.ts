@@ -74,48 +74,61 @@ export class BinariesComponent implements OnInit {
     if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
-      if (!this.systemManuallySelected[index]) {
-        this.detectedSystem[index] = this.conversions.detectSystem(this.value[index], true);
-        this.system[index] = this.detectedSystem[index];
-      }
+      this.detectSystem(index);
 
-      if (this.systemManuallySelected) {
-        if (!this.conversions.validateSystem(this.value[index],
-              this.systems[this.system[index]].nr)) {
-          this.error = 'Incorrect value for that number system.';
-          return false;
-        }
-      }
-
-      if (this.value[index] === 'NaN') {
-        this.error = 'Error';
-        return false;
-      }
-
-      this.error = null;
+      if(!this.validate(index))
+        return;
     }
 
     try {
-      let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
-      const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
+      this.calculate();
+    } catch (e) {
+      this.error = e;
+    }
+  }
 
-      if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
+  private detectSystem(index: number) {
+    if (!this.systemManuallySelected[index]) {
+      this.detectedSystem[index] = this.conversions.detectSystem(this.value[index], true);
+      this.system[index] = this.detectedSystem[index];
+    }
+  }
+
+  private validate(index: number) {
+    if (this.systemManuallySelected) {
+      if (!this.conversions.validateSystem(this.value[index],
+          this.systems[this.system[index]].nr)) {
         this.error = 'Incorrect value for that number system.';
         return false;
       }
+    }
 
-      if(this.operation) {
-        num1 = this.operation.calculate(num1, num2);
-      }
+    if (this.value[index] === 'NaN') {
+      this.error = 'Error';
+      return false;
+    }
 
-      this.results = [];
-      for (let i = 0; i < this.systems.length; i++) {
-        let str = num1.toString(this.systems[i].nr);
-        str = this.conversions.format(str, this.systems[i].nr);
-        this.results[i] = str.toUpperCase();
-      }
-    } catch (e) {
-      this.error = e;
+    this.error = null;
+  }
+
+  private calculate() {
+    let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
+    const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
+
+    if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
+      this.error = 'Incorrect value for that number system.';
+      return false;
+    }
+
+    if(this.operation) {
+      num1 = this.operation.calculate(num1, num2);
+    }
+
+    this.results = [];
+    for (let i = 0; i < this.systems.length; i++) {
+      let str = num1.toString(this.systems[i].nr);
+      str = this.conversions.format(str, this.systems[i].nr);
+      this.results[i] = str.toUpperCase();
     }
   }
 }

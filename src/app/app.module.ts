@@ -40,6 +40,7 @@ import {ConversionsComponent} from './conversions/conversions.component';
 import {MenuComponent} from './menu/menu.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {InputWithSystemComponent} from "./inputWithSystem/inputWithSystem.component";
+import {OperationSelectComponent} from "./operation-select/operation-select.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -70,7 +71,8 @@ type StoreType = {
     UnixTimeComponent,
     TagCloudComponent,
     ChmodComponent,
-    InputWithSystemComponent
+    InputWithSystemComponent,
+    OperationSelectComponent
   ],
   /**
    * Import Angular's modules.
