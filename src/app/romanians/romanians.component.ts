@@ -10,8 +10,27 @@ let bigInt = require("big-integer");
 })
 export class RomaniansComponent implements OnInit {
 
-  public value: string = '';
-  system: number = 0;
+  private _value: string = '';
+
+  get value() {
+    return this._value;
+  }
+  set value(newValue: string) {
+    this._value = newValue.trim();
+    this.valueChange();
+  }
+
+  private _system: number = 0;
+
+  get system() {
+    return this._system;
+  }
+  set system(newSystem: number) {
+    this._system = newSystem;
+    this.systemManuallySelected = this.system != -1;
+    this.valueChange();
+  }
+
   systemManuallySelected: boolean = false;
   detectedNumeral: number = -1;
 
@@ -39,35 +58,28 @@ export class RomaniansComponent implements OnInit {
     this.meta.title$.next("Binary Calculator - Romanian numerals to Arabic converter");
   }
 
-  public systemSelected() {
-    this.systemManuallySelected = this.system != -1;
-    this.valueChange();
+  valueChange() {
+    this.detectSystem();
+
+    this.error = this.validate();
+
+    if (this.error)
+      return false;
+
+    if (this.system === 0)
+      this.result = this.conversions.toRoman(bigInt(this.value));
+    else
+      this.result = this.conversions.fromRoman(this.value)+"";
   }
 
-  valueChange() {
-    this.value = this.value.trim();
-
+  private detectSystem() {
     if (!this.systemManuallySelected) {
       this.detectedNumeral = this.conversions.detectNumeral(this.value);
-      this.system = this.detectedNumeral;
-    }
-
-    const error = this.validate();
-
-    if (error) {
-      this.error = error;
-      return false;
-    } else
-      this.error = null;
-
-    if (this.system === 0) {
-      this.result = this.conversions.toRoman(bigInt(this.value));
-    } else {
-      this.result = this.conversions.fromRoman(this.value)+"";
+      this._system = this.detectedNumeral;
     }
   }
 
-  validate(): string {
+  private validate(): string {
     if (this.system === 0) {
       try {
         const num = bigInt(this.value);
@@ -85,5 +97,7 @@ export class RomaniansComponent implements OnInit {
         return e;
       }
     }
+
+    return null;
   }
 }

@@ -6,10 +6,8 @@
 <section class="primary-bg">
   <app-input-with-system [placeholder]="'Your Value (eg. \'rgb(0, 67, 255)\', \'#0022FF\', \'hsl()\', CMYK)'"
                          [(value)]="value"
-                         (valueChange)="OnValueChanged($event)"
                          [systems]="systems"
-                         [(system)]="system"
-                         (systemChange)="systemSelected()">
+                         [(system)]="system">
   </app-input-with-system>
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>

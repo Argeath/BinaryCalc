@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BigInteger } from 'big-integer';
 let bigInt = require('big-integer');
 
 @Injectable()
@@ -217,7 +218,8 @@ export class ConversionsService {
     return true;
   }
 
-  public pow2(exp: number) {
-    return bigInt(2).shiftLeft(exp - 1);
+  public pow2(exp: number): BigInteger {
+    const two: BigInteger = bigInt(2);
+    return two.shiftLeft(exp - 1);
   }
 }

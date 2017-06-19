@@ -1,5 +1,5 @@
 <div class="input-box input-group">
-  <input class="form-control" placeholder="{{placeholder}}" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)"/>
+  <input class="form-control" placeholder="{{placeholder}}" [(ngModel)]="value" (ngModelChange)="setValue()"/>
 
   <div class="input-group-btn" ngbDropdown *ngIf="hasBitSelect">
     <button ngbDropdownToggle type="button" class="btn btn-secondary">

@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ConversionsService} from '../services/conversions.service';
 import {MetaDataService} from '../services/meta-data.service';
+import { BigInteger } from 'big-integer';
+import {Operation} from "../operation-select/operation";
 let bigInt = require('big-integer');
 
 @Component({
@@ -14,9 +16,9 @@ export class BinariesComponent implements OnInit {
   public system = [0, 0];
   public systemManuallySelected = [false, false];
   public detectedSystem = [0, 0];
-  public operation = null;
+  public operation : Operation = null;
 
-  public operations = [
+  public operations: Operation[] = [
     {
       name: '& (AND)',
       calculate: (num1, num2) => num1.and(num2)
@@ -95,12 +97,9 @@ export class BinariesComponent implements OnInit {
   }
 
   private validate(index: number) {
-    if (this.systemManuallySelected) {
-      if (!this.conversions.validateSystem(this.value[index],
-          this.systems[this.system[index]].nr)) {
-        this.error = 'Incorrect value for that number system.';
-        return false;
-      }
+    if (!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
+      this.error = 'Incorrect value for that number system.';
+      return false;
     }
 
     if (this.value[index] === 'NaN') {
@@ -109,11 +108,12 @@ export class BinariesComponent implements OnInit {
     }
 
     this.error = null;
+    return true;
   }
 
   private calculate() {
-    let num1 = bigInt(this.value[0], this.systems[this.system[0]].nr);
-    const num2 = bigInt(this.value[1], this.systems[this.system[1]].nr);
+    let num1: BigInteger = bigInt(this.value[0], this.systems[this.system[0]].nr);
+    const num2: BigInteger = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
     if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
       this.error = 'Incorrect value for that number system.';

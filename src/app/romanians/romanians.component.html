@@ -4,7 +4,10 @@
 </header>
 
 <section class="primary-bg">
-  <app-input-with-system [(value)]="value" (valueChange)="valueChange()" [systems]="systems" [(system)]="system" (systemChange)="systemSelected()"></app-input-with-system>
+  <app-input-with-system [(value)]="value"
+                         [systems]="systems"
+                         [(system)]="system">
+  </app-input-with-system>
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>
 

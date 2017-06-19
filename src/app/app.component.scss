@@ -21,8 +21,13 @@
 }
 
 footer {
-  padding-top: 50px;
-  text-align: center;
+  padding: 50px 0 20px 0;
+  align-content: center;
+  justify-content: center;
+
+  a {
+    margin: -5px 25px 0;
+  }
 }
 
 .panel {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { ConversionsService } from './services/conversions.service';
 import { Title } from '@angular/platform-browser';
 import { MetaDataService } from './services/meta-data.service';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app',
@@ -13,17 +14,20 @@ import { MetaDataService } from './services/meta-data.service';
     Title
   ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  public ENV = ENV;
 
-  public angularclassLogo = 'assets/img/angularclass-avatar.png';
-  public name = 'Angular 2 Webpack Starter';
-  public url = 'https://twitter.com/AngularClass';
+  titleSubscribe: Subscription;
 
   public constructor(private titleService: Title,
                      private meta: MetaDataService) {
   }
 
   public ngOnInit(): void {
-    this.meta.title$.subscribe((val) => this.titleService.setTitle(val));
+    this.titleSubscribe = this.meta.title$.subscribe((val) => this.titleService.setTitle(val));
+  }
+
+  ngOnDestroy(): void {
+    this.titleSubscribe.unsubscribe();
   }
 }

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ConversionsService} from "../services/conversions.service";
 import {MetaDataService} from "../services/meta-data.service";
+import { BigInteger } from 'big-integer';
 const bigInt = require("big-integer");
 
 @Component({
@@ -10,19 +11,47 @@ const bigInt = require("big-integer");
 })
 export class NegativesComponent implements OnInit {
 
-  public value: string = '';
-  public decValue: string = '';
-  public bits: number = 0;
-  public system: number = 0;
-  public systemManuallySelected: boolean = false;
-  public bitsManuallySelected: boolean = false;
-  public detectedSystem: number = 0;
+  private _value: string = '';
 
-  public bitsArray = [];
-  public systems = [];
-  public error: string = null;
+  get value() {
+    return this._value;
+  }
+  set value(newValue: string) {
+    this._value = newValue.trim();
+    this.valueChange();
+  }
 
-  public results = [
+  private _system: number = 0;
+
+  get system() {
+    return this._system;
+  }
+  set system(newSystem: number) {
+    this._system = newSystem;
+    this.systemManuallySelected = true;
+    this.valueChange();
+  }
+
+  private _bits: number = 0;
+
+  get bits() {
+    return this._bits;
+  }
+  set bits(newSystem: number) {
+    this._bits = newSystem;
+    this.bitsManuallySelected = true;
+    this.valueChange();
+  }
+
+  systemManuallySelected: boolean = false;
+  bitsManuallySelected: boolean = false;
+  private detectedSystem: number = 0;
+
+  bitsArray = [];
+  systems = [];
+  error: string = null;
+
+  results = [
     {
       name: 'sign and magnitude', // znak-moduł
       data: [],
@@ -40,7 +69,7 @@ export class NegativesComponent implements OnInit {
     }
   ];
 
-  public tags = [
+  tags = [
     'binary calculator',
     'negative numbers',
     'negative numerals',
@@ -66,35 +95,23 @@ export class NegativesComponent implements OnInit {
     'znak modul'
   ];
 
-  constructor(public conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
     this.systems = conversions.systems;
     this.bitsArray = conversions.bitsArray;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - negative Numbers Representations: ' +
       "Signed magnitude, Ones' Complement, Two's Complement");
   }
 
-  public bitsSelected() {
-    this.bitsManuallySelected = this.bits !== 0;
-    this.valueChange();
-  }
-
-  public systemSelected() {
-    this.systemManuallySelected = this.system !== 0;
-    this.valueChange();
-  };
-
-  public valueChange() {
-    this.value = this.value.trim();
+  valueChange() {
     const str = this.value.replace(/\s+/g, '').replace(/-/g, '');
 
     this.detectSystem(str);
     this.detectBits(str);
 
-    let dec = bigInt(0);
-
+    let dec: BigInteger = bigInt(0);
     try {
       dec = bigInt(str, this.systems[this.system].nr);
 
@@ -104,7 +121,6 @@ export class NegativesComponent implements OnInit {
       }
 
       this.error = null;
-      this.decValue = dec.toString(10);
 
     } catch (e) {
       this.error = e;
@@ -112,34 +128,37 @@ export class NegativesComponent implements OnInit {
     }
 
     const maxVal = this.conversions.pow2(this.bits - 1);
+    const mask = this.conversions.pow2(this.bits).minus(1);
+    const negU1 = dec.not().and(mask);
+    const negU2 = negU1.add(1);
 
     // Z-M
     try {
       this.calculateSignAndMagnitude(dec, maxVal);
+
     } catch (e) {
       this.results[0].error = e;
     }
 
-    let mask = this.conversions.pow2(this.bits).minus(1);
 
     // U1
-    let neg = dec.not().and(mask);
     try {
-      this.calculateOnesComplement(dec, maxVal, neg);
+      this.calculateOnesComplement(dec, maxVal, negU1);
+
     } catch (e) {
       this.results[1].error = e;
     }
 
     // U2
-    neg = neg.add(1);
     try {
-      this.calculateTwosComplement(dec, maxVal, neg);
+      this.calculateTwosComplement(dec, maxVal, negU2);
+
     } catch (e) {
       this.results[2].error = e;
     }
   }
 
-  private detectSystem(str) {
+  private detectSystem(str: string) {
     if (!this.systemManuallySelected) {
       if (this.value.length === 0)
         this.system = 0;
@@ -150,17 +169,16 @@ export class NegativesComponent implements OnInit {
     }
   }
 
-  private detectBits(str) {
+  private detectBits(str: string) {
     if (!this.bitsManuallySelected) {
       if (this.value.length === 0)
         this.bits = 0;
-      else {
+      else
         this.bits = this.conversions.detectBits(str, this.systems[this.system].nr, true);
-      }
     }
   }
 
-  private calculateSignAndMagnitude(dec, maxVal) {
+  private calculateSignAndMagnitude(dec: BigInteger, maxVal: BigInteger) {
     if (dec.compareAbs(maxVal) === -1) { // dec < maxVal
       let zmVal = dec.add(maxVal); // 2^8, 2^16 ...
 
@@ -169,41 +187,47 @@ export class NegativesComponent implements OnInit {
         let str = zmVal.toString(this.systems[i].nr);
         str = this.conversions.fillWithZeros(str, this.systems[i].nr, this.bits);
         str = this.conversions.format(str, this.systems[i].nr);
+
         this.results[0].data[i] = str.toUpperCase();
       }
+
       this.results[0].error = null;
-    } else {
+
+    } else
       this.results[0].error = 'Bit amount not big enough.';
-    }
   }
 
-  private calculateOnesComplement(dec, maxVal, neg) {
+  private calculateOnesComplement(dec: BigInteger, maxVal: BigInteger, neg: BigInteger) {
     if (dec.compareAbs(maxVal) === -1) {
       this.results[1].data = [];
       for (let i = 0; i < this.systems.length; i++) {
         let str = neg.toString(this.systems[i].nr);
         str = this.conversions.fillWithZeros(str, this.systems[i].nr, this.bits);
         str = this.conversions.format(str, this.systems[i].nr);
+
         this.results[1].data[i] = str.toUpperCase();
       }
+
       this.results[1].error = null;
-    } else {
+
+    } else
       this.results[1].error = 'Bit amount not big enough.';
-    }
   }
 
-  private calculateTwosComplement(dec, maxVal, neg) {
-    if (dec.compareAbs(maxVal + 1) === -1) {
+  private calculateTwosComplement(dec: BigInteger, maxVal: BigInteger, neg: BigInteger) {
+    if (dec.compareAbs(maxVal.add(1)) === -1) {
       this.results[2].data = [];
       for (let i = 0; i < this.systems.length; i++) {
-        let strr = neg.toString(this.systems[i].nr);
-        strr = this.conversions.fillWithZeros(strr, this.systems[i].nr, this.bits);
-        strr = this.conversions.format(strr, this.systems[i].nr);
-        this.results[2].data[i] = strr.toUpperCase();
+        let str = neg.toString(this.systems[i].nr);
+        str = this.conversions.fillWithZeros(str, this.systems[i].nr, this.bits);
+        str = this.conversions.format(str, this.systems[i].nr);
+
+        this.results[2].data[i] = str.toUpperCase();
       }
+
       this.results[2].error = null;
-    } else {
+
+    } else
       this.results[2].error = 'Bit amount not big enough.';
-    }
   }
 }

@@ -19,12 +19,13 @@
     <div class="col-md-9">
       <div class="panel row">
         <router-outlet></router-outlet>
-        <div class="fb-comments" data-href="http://binary-calc.com" data-width="100%" data-numposts="5"></div>
+        <div class="fb-comments" data-href="http://binary-calc.com" data-width="100%" data-numposts="5" *ngIf="ENV == 'production'"></div>
       </div>
     </div>
   </div>
 
   <footer class="row" id="_author1" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    Copyright © 2017 by <a href="https://github.com/argeath" itemprop="name">Dominik Kinal</a>
+    Copyright © 2017 by <a href="https://github.com/argeath" class="btn btn-secondary" itemprop="name">Dominik Kinal</a>
+    <span *ngIf="ENV != 'production'">{{ENV}}</span>
   </footer>
 </div>

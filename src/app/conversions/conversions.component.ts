@@ -10,17 +10,36 @@ let bigInt = require('big-integer');
 })
 export class ConversionsComponent implements OnInit {
 
-  public value: string = '';
-  public system: number = 0;
-  public systemManuallySelected: boolean = false;
-  public detectedSystem: number = 0;
+  private _value: string = '';
 
-  public systems = [];
+  get value() {
+    return this._value;
+  }
+  set value(newValue: string) {
+    this._value = newValue.trim();
+    this.valueChange();
+  }
 
-  public results = [];
-  public error: string = null;
+  private _system: number = 0;
 
-  public tags = [
+  get system() {
+    return this._system;
+  }
+  set system(newSystem: number) {
+    this._system = newSystem;
+    this.systemManuallySelected = true;
+    this.valueChange();
+  }
+
+  systemManuallySelected: boolean = false;
+  detectedSystem: number = 0;
+
+  systems = [];
+
+  results = [];
+  error: string = null;
+
+  tags = [
     'number system',
     'numeral system',
     'binary',
@@ -51,50 +70,58 @@ export class ConversionsComponent implements OnInit {
     'binary calculator'
   ];
 
-  constructor(public conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
     this.systems = conversions.systems;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - number base conversions, ' +
       'binary to decimal, hexadecimal, octal numerals');
   }
 
-  public systemSelected() {
-    this.systemManuallySelected = true;
-    this.valueChange();
-  };
+  valueChange() {
+    this.detectSystem();
 
-  public valueChange() {
-    this.value = this.value.trim();
+    if(!this.validate())
+      return;
 
+    try {
+      this.calculate();
+
+    } catch (e) {
+      this.error = e;
+    }
+  }
+
+  private detectSystem() {
     if (!this.systemManuallySelected) {
       this.detectedSystem = this.conversions.detectSystem(this.value, true);
-      this.system = this.detectedSystem;
+      this._system = this.detectedSystem;
     }
+  }
 
-    if (this.systemManuallySelected) {
-      if (!this.conversions.validateSystem(this.value, this.systems[this.system].nr)) {
-        this.error = 'Incorrect value for that number system.';
-        return false;
-      }
+  private validate(): boolean {
+    if (!this.conversions.validateSystem(this.value, this.systems[this.system].nr)) {
+      this.error = 'Incorrect value for that number system.';
+      return false;
     }
 
     this.error = null;
-    try {
-      let num = bigInt(this.value, this.systems[this.system].nr);
-      if (isNaN(num.valueOf())) {
-        this.error = 'Incorrect value for that number system.';
-        return false;
-      }
+    return true;
+  }
 
-      this.results = [];
-      for (let i = 0; i < this.systems.length; i++) {
-        let str = num.toString(this.systems[i].nr);
-        this.results[i] = this.conversions.format(str, this.systems[i].nr);
-      }
-    } catch (e) {
-      this.error = e;
+  private calculate() {
+    const num = bigInt(this.value, this.systems[this.system].nr);
+
+    if (isNaN(num.valueOf())) {
+      this.error = 'Incorrect value for that number system.';
+      return false;
+    }
+
+    this.results = [];
+    for (let i = 0; i < this.systems.length; i++) {
+      let str = num.toString(this.systems[i].nr);
+      this.results[i] = this.conversions.format(str, this.systems[i].nr);
     }
   }
 }

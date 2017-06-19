@@ -1,5 +1,8 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {NgLog} from "../../utils/ngLog";
+import {throttle} from "../../utils/throttle";
 
+@NgLog()
 @Component({
   selector: 'app-input-with-system',
   templateUrl: 'inputWithSystem.component.html',
@@ -23,6 +26,11 @@ export class InputWithSystemComponent {
   @Output() valueChange = new EventEmitter<string>();
   @Output() systemChange = new EventEmitter<number>();
   @Output() bitsChange = new EventEmitter<number>();
+
+  @throttle()
+  setValue() {
+    this.valueChange.emit(this.value);
+  }
 
   setSystem(newSystem: number) {
     this.system = newSystem;
