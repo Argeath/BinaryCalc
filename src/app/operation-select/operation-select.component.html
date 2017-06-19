@@ -1,6 +1,7 @@
 <div class="operation-box row">
   <div ngbDropdown class="d-inline-block">
     <button class="btn btn-warning" id="dropdownOperation" ngbDropdownToggle>{{operation ? operation.name : 'Choose operation'}}</button>
+
     <div class="dropdown-menu" aria-labelledby="dropdownOperation">
       <button *ngFor="let o of operations" class="dropdown-item" (click)="operation = o; operationChange.emit(o)">{{o.name}}</button>
     </div>

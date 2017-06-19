@@ -429,4 +429,4 @@ module.exports = function (options) {
     }
 
   };
-}
+};

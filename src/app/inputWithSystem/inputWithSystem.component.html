@@ -14,17 +14,18 @@
 
   <div class="input-group-btn" ngbDropdown>
     <button ngbDropdownToggle type="button" class="btn btn-secondary">
-      <span *ngIf="system >= 0">
-        <span *ngIf="displaySystemNumber">({{systems[system].nr}})</span> {{systems[system].name}}
-      </span>
+      <ng-container *ngIf="system >= 0">
+        <ng-container *ngIf="displaySystemNumber">({{systems[system].nr}})</ng-container> {{systems[system].name}}
+      </ng-container>
 
-      <span *ngIf="system == -1">auto detect</span>
+      <ng-container *ngIf="system == -1">auto detect</ng-container>
       <span class="caret"></span>
     </button>
 
     <div class="dropdown-menu dropdown-menu-right">
       <button *ngFor="let s of systems; let i = index" class="dropdown-item" (click)="setSystem(i)">
-        <span *ngIf="displaySystemNumber">({{s.nr}})</span> {{s.name}}
+        <ng-container
+          *ngIf="displaySystemNumber">({{s.nr}})</ng-container> {{s.name}}
       </button>
     </div>
   </div>

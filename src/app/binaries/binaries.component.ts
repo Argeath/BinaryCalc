@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ConversionsService} from '../services/conversions.service';
-import {MetaDataService} from '../services/meta-data.service';
-import { BigInteger } from 'big-integer';
+import {Component, OnInit} from "@angular/core";
+import {ConversionsService} from "../services/conversions.service";
+import {MetaDataService} from "../services/meta-data.service";
+import {BigInteger} from "big-integer";
 import {Operation} from "../operation-select/operation";
 let bigInt = require('big-integer');
 
@@ -12,13 +12,22 @@ let bigInt = require('big-integer');
 })
 export class BinariesComponent implements OnInit {
 
-  public value = ['', ''];
-  public system = [0, 0];
-  public systemManuallySelected = [false, false];
-  public detectedSystem = [0, 0];
-  public operation : Operation = null;
+  value: string[] = ['', ''];
+  system = [0, 0];
+  systemManuallySelected = [false, false];
+  detectedSystem = [0, 0];
+  private _operation: Operation = null;
 
-  public operations: Operation[] = [
+  get operation() {
+    return this._operation;
+  }
+
+  set operation(newValue: Operation) {
+    this._operation = newValue;
+    this.valueChange();
+  }
+
+  operations: Operation[] = [
     {
       name: '& (AND)',
       calculate: (num1, num2) => num1.and(num2)
@@ -33,12 +42,12 @@ export class BinariesComponent implements OnInit {
     }
   ];
 
-  public systems = [];
+  systems = [];
 
-  public results = [];
-  public error: string = null;
+  results = [];
+  error: string = null;
 
-  public tags = [
+  tags = [
     'binary calculator',
     'binary operations',
     'binary AND',
@@ -54,31 +63,26 @@ export class BinariesComponent implements OnInit {
     'hexadecimal operations'
   ];
 
-  constructor(public conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
     this.systems = conversions.systems;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - binary operations: AND, OR on any base');
   }
 
-  public systemSelected(index: number) {
+  systemSelected(index: number) {
     this.systemManuallySelected[index] = true;
     this.valueChange(index);
   }
 
-  public operationSelected(newValue) {
-    this.operation = newValue;
-    this.valueChange();
-  };
-
-  public valueChange(index?: number) {
+  valueChange(index?: number) {
     if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
       this.detectSystem(index);
 
-      if(!this.validate(index))
+      if (!this.validate(index))
         return;
     }
 
@@ -120,7 +124,7 @@ export class BinariesComponent implements OnInit {
       return false;
     }
 
-    if(this.operation) {
+    if (this.operation) {
       num1 = this.operation.calculate(num1, num2);
     }
 

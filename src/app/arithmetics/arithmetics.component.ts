@@ -12,13 +12,23 @@ const bigInt = require('big-integer');
 })
 export class ArithmeticsComponent implements OnInit {
 
-  public value = ['', ''];
-  public system = [0, 0];
-  public systemManuallySelected = [false, false];
-  public detectedSystem = [0, 0];
-  public operation : Operation = null;
+  value = ['', ''];
+  system = [0, 0];
+  systemManuallySelected = [false, false];
+  detectedSystem = [0, 0];
 
-  public operations: Operation[] = [
+  private _operation : Operation = null;
+
+  get operation() {
+    return this._operation;
+  }
+
+  set operation(newValue: Operation) {
+    this._operation = newValue;
+    this.valueChange();
+  }
+
+  operations: Operation[] = [
     {
       name: '+ (addition)',
       calculate: (num1, num2) => num1.add(num2)
@@ -40,12 +50,12 @@ export class ArithmeticsComponent implements OnInit {
       calculate: (num1, num2) => num1.mod(num2)
     }
   ];
-  public systems = [];
+  systems = [];
 
-  public results = [];
-  public error: string = null;
+  results = [];
+  error: string = null;
 
-  public tags = [
+  tags = [
     'binary calculator',
     'arithmetic',
     'addition',
@@ -62,26 +72,21 @@ export class ArithmeticsComponent implements OnInit {
     'conversions'
   ];
 
-  constructor(public conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
     this.systems = conversions.systems;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - arithmetic operations: ' +
       'Addition, Subtraction, Modulus, Division on any base');
   }
 
-  public systemSelected(num: number) {
+  systemSelected(num: number) {
     this.systemManuallySelected[num] = true;
     this.valueChange(num);
   };
 
-  public operationSelected(newValue) {
-    this.operation = newValue;
-    this.valueChange();
-  };
-
-  public valueChange(index?: number) {
+  valueChange(index?: number) {
     if (index != null) {
       this.value[index] = this.value[index].trim();
 

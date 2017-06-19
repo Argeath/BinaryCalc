@@ -13,7 +13,7 @@ export function log$(target : any, propertyKey : string ) {
         const isArrayOfObjects = Array.isArray(res) && typeof res[0] === 'object';
         const logType = isArrayOfObjects ? 'table' : 'log';
         console.groupCollapsed(propertyKey);
-        console[logType](res)
+        console[logType](res);
         console.groupEnd();
       });
     } else {
