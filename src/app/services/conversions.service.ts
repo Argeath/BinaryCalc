@@ -14,9 +14,6 @@ export class ConversionsService {
   public static ARABIC = 0;
   public static ROMAN = 1;
 
-  public static ROMANTABLE = {M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90,
-                               L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1};
-
   public static detectNumeralSystem(v: string): number {
     v = v.toUpperCase();
 
@@ -46,7 +43,7 @@ export class ConversionsService {
         max = cnr;
       }
     }
-    max++;
+
     return max;
   }
 
@@ -111,11 +108,11 @@ export class ConversionsService {
   public static fromArabicToRoman(num: number): string {
     let roman = '';
 
-    for (const i in ConversionsService.ROMANTABLE) {
-      if (ConversionsService.ROMANTABLE.hasOwnProperty(i)) {
-        while (num >= ConversionsService.ROMANTABLE[i]) {
+    for (const i in ConversionsService.ROMAN_TABLE) {
+      if (ConversionsService.ROMAN_TABLE.hasOwnProperty(i)) {
+        while (num >= ConversionsService.ROMAN_TABLE[i]) {
           roman += i;
-          num -= ConversionsService.ROMANTABLE[i];
+          num -= ConversionsService.ROMAN_TABLE[i];
         }
       }
     }
@@ -126,10 +123,10 @@ export class ConversionsService {
   public static fromRomanToArabic(str: string): number {
     let result = 0;
 
-    for (const i in ConversionsService.ROMANTABLE) {
-      if (ConversionsService.ROMANTABLE.hasOwnProperty(i)) {
+    for (const i in ConversionsService.ROMAN_TABLE) {
+      if (ConversionsService.ROMAN_TABLE.hasOwnProperty(i)) {
         while (str.indexOf(i) === 0) {
-          result += ConversionsService.ROMANTABLE[i];
+          result += ConversionsService.ROMAN_TABLE[i];
           str = str.replace(i, '');
         }
       }
@@ -155,6 +152,9 @@ export class ConversionsService {
     const two: BigInteger = bigInt(2);
     return two.shiftLeft(exp - 1);
   }
+
+  private static ROMAN_TABLE = {M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90,
+    L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1};
 
   public bitsArray = [4, 8, 16, 32, 64];
 
@@ -197,19 +197,24 @@ export class ConversionsService {
       return max;
     }
 
-    return this.binarySystems.findIndex((s) => !s.skipDetection && s.nr >= max);
+    return this.binarySystems.findIndex((s) => !s.skipDetection && s.nr <= max);
   }
 
-  public detectBitLength(v: string, base: number, pushToHigher?: boolean): number {
-    const str = v.replace(/\s+/g, '').replace(/-/g, ''); // Remove spaces and dashes
-    const dec = ConversionsService.parseAnyBaseToDec(str, base) * 2 + 1;
-    const bits = Math.ceil(Math.log2(dec));
+  public detectBitLength(num: number, pushToHigher?: boolean): number {
+    const bits = Math.ceil(Math.log2(num));
 
     if (!pushToHigher) {
       return bits;
     }
 
-    const pushed = this.bitsArray.find((b) => bits >= b);
+    const pushed = this.bitsArray.find((b) => bits <= b);
     return pushed ? pushed : bits;
+  }
+
+  public detectBitLengthForNegative(v: string, base: number, pushToHigher?: boolean): number {
+    const str = v.replace(/\s+/g, '').replace(/-/g, ''); // Remove spaces and dashes
+    const dec = ConversionsService.parseAnyBaseToDec(str, base) * 2 + 1;
+
+    return this.detectBitLength(dec, pushToHigher); // max value for negatives
   }
 }

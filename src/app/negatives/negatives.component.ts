@@ -171,7 +171,8 @@ export class NegativesComponent implements OnInit {
       if (this.value.length === 0) {
         this.bits = 0;
       } else {
-        this.bits = this.conversions.detectBitLength(str, this.systems[this.system].nr, true);
+        this.bits = this.conversions.detectBitLengthForNegative(str,
+          this.systems[this.system].nr, true);
       }
     }
   }
