@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ConversionsService} from "../services/conversions.service";
-import {MetaDataService} from "../services/meta-data.service";
-let bigInt = require("big-integer");
+import { Component, OnInit } from '@angular/core';
+import { ConversionsService } from '../services/conversions.service';
+import { MetaDataService } from '../services/meta-data.service';
+const bigInt = require('big-integer');
 
 @Component({
   selector: 'app-romanians',
@@ -9,6 +9,25 @@ let bigInt = require("big-integer");
   styleUrls: ['./romanians.component.scss']
 })
 export class RomaniansComponent implements OnInit {
+
+  public systemManuallySelected: boolean = false;
+  public detectedNumeral: number = -1;
+
+  public systems = [];
+
+  public result: string = '';
+  public error: string = null;
+
+  public tags = [
+    'romanian',
+    'romanian to arabic',
+    'arabic to romanian',
+    'arabic converter',
+    'romanian converter',
+    'roman numeralSystems',
+    'romanian numeralSystems',
+    'romanian calculator'
+  ];
 
   private _value: string = '';
 
@@ -27,54 +46,37 @@ export class RomaniansComponent implements OnInit {
   }
   set system(newSystem: number) {
     this._system = newSystem;
-    this.systemManuallySelected = this.system != -1;
+    this.systemManuallySelected = this.system !== -1;
     this.valueChange();
   }
 
-  systemManuallySelected: boolean = false;
-  detectedNumeral: number = -1;
-
-  systems = [];
-
-  result: string = '';
-  error: string = null;
-
-  tags = [
-    'romanian',
-    'romanian to arabic',
-    'arabic to romanian',
-    'arabic converter',
-    'romanian converter',
-    'roman numerals',
-    'romanian numerals',
-    'romanian calculator'
-  ];
-
   constructor(public conversions: ConversionsService, private meta: MetaDataService) {
-    this.systems = conversions.numerals;
+    this.systems = conversions.numeralSystems;
   }
 
   public ngOnInit(): void {
-    this.meta.title$.next("Binary Calculator - Romanian numerals to Arabic converter");
+    this.meta.title$.next('Binary Calculator - Romanian numeralSystems to Arabic converter');
   }
 
-  valueChange() {
+  public valueChange() {
     this.detectSystem();
 
     this.error = this.validate();
 
-    if (this.error)
+    if (this.error) {
       return false;
+    }
 
-    if (this.system === 0)
-      this.result = this.conversions.toRoman(bigInt(this.value));
-    else
-      this.result = this.conversions.fromRoman(this.value)+"";
+    if (this.system === 0) {
+      this.result = ConversionsService.fromArabicToRoman(bigInt(this.value));
+    } else {
+      this.result = ConversionsService.fromRomanToArabic(this.value) + '';
+    }
   }
 
   private detectSystem() {
     if (!this.systemManuallySelected) {
-      this.detectedNumeral = this.conversions.detectNumeral(this.value);
+      this.detectedNumeral = ConversionsService.detectNumeralSystem(this.value);
       this._system = this.detectedNumeral;
     }
   }
@@ -85,13 +87,14 @@ export class RomaniansComponent implements OnInit {
         const num = bigInt(this.value);
 
         if (isNaN(num.value)) {
-          return "Incorrect value for that number system.";
+          return 'Incorrect value for that number system.';
         }
 
-        if (num < 1)
-          return "Smallest number in Roman is 1.";
-        if (num > 3999)
-          return "Largest number in Roman is 3999.";
+        if (num < 1) {
+          return 'Smallest number in Roman is 1.';
+        } else if (num > 3999) {
+          return 'Largest number in Roman is 3999.';
+        }
 
       } catch (e) {
         return e;

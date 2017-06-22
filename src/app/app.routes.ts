@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import {ConversionsComponent} from './conversions/conversions.component';
-import {NegativesComponent} from './negatives/negatives.component';
-import {ArithmeticsComponent} from './arithmetics/arithmetics.component';
-import {BinariesComponent} from './binaries/binaries.component';
-import {RomaniansComponent} from './romanians/romanians.component';
-import {ColorsComponent} from './colors/colors.component';
-import {UnixTimeComponent} from './unixTime/unixTime.component';
+import { ConversionsComponent } from './conversions/conversions.component';
+import { NegativesComponent } from './negatives/negatives.component';
+import { ArithmeticsComponent } from './arithmetics/arithmetics.component';
+import { BinariesComponent } from './binaries/binaries.component';
+import { RomaniansComponent } from './romanians/romanians.component';
+import { ColorsComponent } from './colors/colors.component';
+import { UnixTimeComponent } from './unixTime/unixTime.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: '/number-system-converter', pathMatch: 'full' },

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-operation-select',
@@ -7,8 +7,8 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 })
 export class OperationSelectComponent {
 
-  @Input() operations;
-  @Input() operation;
+  @Input() public operations;
+  @Input() public operation;
 
-  @Output() operationChange = new EventEmitter();
+  @Output() public operationChange = new EventEmitter();
 }

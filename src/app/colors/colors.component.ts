@@ -10,27 +10,6 @@ import { MetaDataService } from '../services/meta-data.service';
 })
 export class ColorsComponent implements OnInit {
 
-  private _value: string = '';
-
-  get value() {
-    return this._value;
-  }
-  set value(newValue: string) {
-    this._value = newValue.trim();
-    this.valueChange();
-  }
-
-  private _system: number = -1;
-
-  get system() {
-    return this._system;
-  }
-  set system(newSystem: number) {
-    this._system = newSystem;
-    this.systemManuallySelected = this.system !== -1;
-    this.valueChange();
-  }
-
   public systems = [
     {
       nr: null,
@@ -73,6 +52,27 @@ export class ColorsComponent implements OnInit {
     'CMYK conversion'
   ];
 
+  private _value: string = '';
+
+  get value() {
+    return this._value;
+  }
+  set value(newValue: string) {
+    this._value = newValue.trim();
+    this.valueChange();
+  }
+
+  private _system: number = -1;
+
+  get system() {
+    return this._system;
+  }
+  set system(newSystem: number) {
+    this._system = newSystem;
+    this.systemManuallySelected = this.system !== -1;
+    this.valueChange();
+  }
+
   constructor(public conversions: ConversionsService, private meta: MetaDataService) {
   }
 
@@ -86,14 +86,15 @@ export class ColorsComponent implements OnInit {
     const value = this.value.replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
 
     if (!this.systemManuallySelected) {
-      this.detectedSystem = ColorsComponent.detectSystem(value);
+      this.detectedSystem = this.detectSystem(value);
       this._system = this.detectedSystem;
     }
 
     this.color = new Color();
     if (this.system === 0) { // Hex
-      if(!this.validateHex(value))
+      if (!this.validateHex(value)) {
         return;
+      }
 
       this.fromHex(value);
 
@@ -119,7 +120,7 @@ export class ColorsComponent implements OnInit {
       return false;
     }
 
-    if (!this.conversions.validateSystem(value, 16)) {
+    if (!ConversionsService.validateSystem(value, 16)) {
       this.error = 'Incorrect hex value';
       return false;
     }
@@ -212,7 +213,7 @@ export class ColorsComponent implements OnInit {
     this.color.fromCMYK(c, m, y, k);
   }
 
-  public static detectSystem(v: string): number {
+  private detectSystem(v: string): number {
     v = v.trim().toLowerCase();
 
     if (v.charAt(0) === '#') {

@@ -42,7 +42,7 @@ import * as _ from 'lodash'
  * You can include your type definitions in this file until you create one for the @types
  *
  */
-
+/* tslint:disable */
 // support NodeJS modules without type definitions
 declare module '*';
 

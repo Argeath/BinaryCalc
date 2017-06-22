@@ -25,31 +25,31 @@ import { AppComponent } from './app.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {ChmodComponent} from './chmod/chmod.component';
-import {TagCloudComponent} from './tag-cloud/tag-cloud.component';
-import {UnixTimeComponent} from './unixTime/unixTime.component';
-import {ColorsComponent} from './colors/colors.component';
-import {InfoComponent} from './info/info.component';
-import {ErrorComponent} from './error/error.component';
-import {ResultComponent} from './result/result.component';
-import {RomaniansComponent} from './romanians/romanians.component';
-import {BinariesComponent} from './binaries/binaries.component';
-import {ArithmeticsComponent} from './arithmetics/arithmetics.component';
-import {NegativesComponent} from './negatives/negatives.component';
-import {ConversionsComponent} from './conversions/conversions.component';
-import {MenuComponent} from './menu/menu.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {InputWithSystemComponent} from "./inputWithSystem/inputWithSystem.component";
-import {OperationSelectComponent} from "./operation-select/operation-select.component";
+import { ChmodComponent } from './chmod/chmod.component';
+import { TagCloudComponent } from './tag-cloud/tag-cloud.component';
+import { UnixTimeComponent } from './unixTime/unixTime.component';
+import { ColorsComponent } from './colors/colors.component';
+import { InfoComponent } from './info/info.component';
+import { ErrorComponent } from './error/error.component';
+import { ResultComponent } from './result/result.component';
+import { RomaniansComponent } from './romanians/romanians.component';
+import { BinariesComponent } from './binaries/binaries.component';
+import { ArithmeticsComponent } from './arithmetics/arithmetics.component';
+import { NegativesComponent } from './negatives/negatives.component';
+import { ConversionsComponent } from './conversions/conversions.component';
+import { MenuComponent } from './menu/menu.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { InputWithSystemComponent } from './inputWithSystem/inputWithSystem.component';
+import { OperationSelectComponent } from './operation-select/operation-select.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
 ];
 
-type StoreType = {
-  restoreInputValues: () => void,
-  disposeOldHosts: () => void
-};
+interface StoreType {
+  restoreInputValues: () => void;
+  disposeOldHosts: () => void;
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -108,7 +108,7 @@ export class AppModule {
      * Set input values
      */
     if ('restoreInputValues' in store) {
-      let restoreInputValues = store.restoreInputValues;
+      const restoreInputValues = store.restoreInputValues;
       setTimeout(restoreInputValues);
     }
 

@@ -1,8 +1,8 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConversionsService } from './services/conversions.service';
 import { Title } from '@angular/platform-browser';
 import { MetaDataService } from './services/meta-data.service';
-import {Subscription} from "rxjs";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app',
@@ -15,9 +15,10 @@ import {Subscription} from "rxjs";
   ]
 })
 export class AppComponent implements OnInit, OnDestroy {
+
   public ENV = ENV;
 
-  titleSubscribe: Subscription;
+  private titleSubscribe: Subscription;
 
   public constructor(private titleService: Title,
                      private meta: MetaDataService) {
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.titleSubscribe = this.meta.title$.subscribe((val) => this.titleService.setTitle(val));
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.titleSubscribe.unsubscribe();
   }
 }

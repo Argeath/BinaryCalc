@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {ConversionsService} from '../services/conversions.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { ConversionsService } from '../services/conversions.service';
 
 @Component({
   selector: 'app-result',
@@ -20,7 +20,7 @@ export class ResultComponent implements OnInit {
   public systems = [];
 
   constructor(public conversions: ConversionsService) {
-    this.systems = conversions.systems;
+    this.systems = conversions.binarySystems;
   }
 
   public ngOnInit(): void {

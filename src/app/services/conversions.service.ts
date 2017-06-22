@@ -1,13 +1,164 @@
 import { Injectable } from '@angular/core';
 import { BigInteger } from 'big-integer';
-let bigInt = require('big-integer');
+const bigInt = require('big-integer');
+
+export interface System {
+  nr?: number;
+  name: string;
+  skipDetection?: boolean;
+}
 
 @Injectable()
 export class ConversionsService {
 
+  public static ARABIC = 0;
+  public static ROMAN = 1;
+
+  public static ROMANTABLE = {M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90,
+                               L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1};
+
+  public static detectNumeralSystem(v: string): number {
+    v = v.toUpperCase();
+
+    let i = v.length;
+    let dec: boolean = true;
+
+    while (i--) {
+      const cnr = v.charCodeAt(i);
+      if (cnr < 48 || cnr > 57) {
+        dec = false;
+        break;
+      }
+    }
+
+    return dec ? ConversionsService.ARABIC : ConversionsService.ROMAN; // 0 - arabic, 1 - roman
+  }
+
+  public static getHighestNumeral(v: string) {
+    v = v.toUpperCase();
+
+    let i = v.length;
+    let max = 0;
+
+    while (i--) {
+      const cnr = ConversionsService.ASCIIToHexNumber(v.charCodeAt(i));
+      if (cnr > max) {
+        max = cnr;
+      }
+    }
+    max++;
+    return max;
+  }
+
+  public static format(s: string, base: number) {
+    let split = 4;
+
+    if (base > 2 && base <= 10) {
+      split = 3;
+    } else if (base > 10) {
+      split = 2;
+    }
+
+    const len = s.length;
+
+    if (s === 'NaN' || s === '<NaN>') {
+      return s;
+    }
+
+    if (len < split) {
+      return s;
+    }
+
+    for (let i = len - split; i > 0; i -= split) {
+      s = s.slice(0, i) + ' ' + s.slice(i);
+    }
+
+    return s;
+  }
+
+  public static ASCIIToHexNumber(c: number): number {
+    if (c === 32) { // skip space
+      return 0;
+    } else if (c >= 48 && c <= 57) { // >= '0' && <= '9'
+      return c - 48; // - '0'
+    } else if (c >= 65 && c <= 90) { // >= 'A' && <= 'Z'
+      return c - 55; // A = 10
+    }
+
+    return NaN;
+  }
+
+  public static parseAnyBaseToDec(str: string, base: number): number {
+    if (str.length === 0) {
+      return 0;
+    }
+
+    return parseInt(str, base);
+  }
+
+  public static fillBitsToFullBytesWithZeros(str: string, base: number, bits: number): string {
+    let remaining = 0;
+
+    if (base === 2) {
+      remaining = bits - str.length;
+    } else if (base === 16) {
+      remaining = bits / 4 - str.length;
+    }
+
+    return '0'.repeat(remaining) + str;
+  }
+
+  public static fromArabicToRoman(num: number): string {
+    let roman = '';
+
+    for (const i in ConversionsService.ROMANTABLE) {
+      if (ConversionsService.ROMANTABLE.hasOwnProperty(i)) {
+        while (num >= ConversionsService.ROMANTABLE[i]) {
+          roman += i;
+          num -= ConversionsService.ROMANTABLE[i];
+        }
+      }
+    }
+
+    return roman;
+  }
+
+  public static fromRomanToArabic(str: string): number {
+    let result = 0;
+
+    for (const i in ConversionsService.ROMANTABLE) {
+      if (ConversionsService.ROMANTABLE.hasOwnProperty(i)) {
+        while (str.indexOf(i) === 0) {
+          result += ConversionsService.ROMANTABLE[i];
+          str = str.replace(i, '');
+        }
+      }
+    }
+
+    return result;
+  }
+
+  public static validateSystem(str: string, base: number): boolean {
+    const len = str.length;
+
+    for (let i = 0; i < len; i++) {
+      const cnr = ConversionsService.ASCIIToHexNumber(str.charCodeAt(i));
+      if (cnr >= base) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public static pow2(exp: number): BigInteger {
+    const two: BigInteger = bigInt(2);
+    return two.shiftLeft(exp - 1);
+  }
+
   public bitsArray = [4, 8, 16, 32, 64];
 
-  public systems = [
+  public binarySystems: System[] = [
     {
       nr: 2,
       name: 'binary',
@@ -30,7 +181,7 @@ export class ConversionsService {
     }
   ];
 
-  public numerals = [
+  public numeralSystems: System[] = [
     {
       name: 'Arabic'
     },
@@ -39,187 +190,26 @@ export class ConversionsService {
     }
   ];
 
-  public detectNumeral(v: string): number {
-    v = v.toUpperCase();
-    let i = v.length;
-    let dec: boolean = true;
-    while(i--) {
-      let cnr = v.charCodeAt(i);
-      if (cnr < 48 || cnr > 57) {
-        dec = false;
-        break;
-      }
-    }
-
-    return dec ? 0 : 1; // 0 - arabic, 1 - roman
-  }
-
   public detectSystem(v: string, pushToHigher?: boolean): number {
-    v = v.toUpperCase();
-    let i = v.length;
-    let max = 0;
-    while (i--) {
-      let cnr = this.charToNr(v.charCodeAt(i));
-      if (cnr > max)
-        max = cnr;
-    }
-    max++;
+    const max = ConversionsService.getHighestNumeral(v);
 
-    if (pushToHigher) {
-      let detected = 0;
-      const len = this.systems.length;
-
-      for (let i = 0; i < len; i++) {
-        if (this.systems[i].skipDetection || this.systems[i].nr < max) continue;
-        detected = i;
-        break;
-      }
-      return detected;
+    if (!pushToHigher) {
+      return max;
     }
 
-    return max;
+    return this.binarySystems.findIndex((s) => !s.skipDetection && s.nr >= max);
   }
 
-  public detectBits(v: string, base: number, pushToHigher?: boolean): number {
-    let str = v.replace(/\s+/g, '').replace(/-/g, '');
-    let dec = this.convertToDec(str, base) * 2 + 1;
-    let bits = Math.ceil(Math.log2(dec));
+  public detectBitLength(v: string, base: number, pushToHigher?: boolean): number {
+    const str = v.replace(/\s+/g, '').replace(/-/g, ''); // Remove spaces and dashes
+    const dec = ConversionsService.parseAnyBaseToDec(str, base) * 2 + 1;
+    const bits = Math.ceil(Math.log2(dec));
 
-    if (pushToHigher) {
-      let detected = 0;
-      const len = this.bitsArray.length;
-
-      for (let i = 0; i < len; i++) {
-        if (this.bitsArray[i] < bits) continue;
-        detected = this.bitsArray[i];
-        break;
-      }
-
-      return detected;
-    }
-    return bits;
-  }
-
-  public format(s, base: number) {
-    let split = 4;
-    if (base > 2 && base <= 10)
-      split = 3;
-    if (base > 10)
-      split = 2;
-
-    const len = s.length;
-
-    if (s === 'NaN' || s === '<NaN>')
-      return s;
-
-    if (len < split)
-      return s;
-
-    for(let i = len - split; i > 0; i-= split) {
-      s = s.slice(0, i) + ' ' + s.slice(i);
+    if (!pushToHigher) {
+      return bits;
     }
 
-    return s;
-  }
-
-  public charToNr(c: number) {
-    if (c === 32) // skip space
-      return 0;
-    if (c >= 48 && c <= 57) // >= '0' && <= '9'
-      return c - 48; // - '0'
-    if (c >= 65 && c <= 90) // >= 'A' && <= 'Z'
-      return c - 55; // A = 10
-    return NaN;
-  }
-
-  public nrToChar(c: number): string {
-    if (c >= 10) {
-      return String.fromCharCode(55 + c);
-    }
-    return c + '';
-  }
-
-  public convertToBase(number: number, toBase: number) {
-    if (number == null)
-      number = 0;
-
-    const converted = [];
-
-    while(number >= 1) {
-      converted.unshift(number % toBase);
-      number = Math.floor(number / toBase);
-    }
-
-    if (converted.length === 0)
-      converted.push(0);
-
-    return converted;
-  }
-
-  public convertToDec(str: string, base: number): number {
-    if (str.length == 0)
-      return 0;
-
-    return parseInt(str, base);
-  }
-
-  public fillWithZeros(str: string, base: number, bits: number) {
-    let remaining = 0;
-    if (base === 2) {
-      remaining = bits - str.length;
-    } else if (base === 16) {
-      remaining = bits / 4 - str.length;
-    }
-
-    for(let i = 0; i < remaining; i++) {
-      str = '0' + str;
-    }
-
-    return str;
-  }
-
-  public toRoman(num: number): string {
-    const lookup = {M : 1000, CM : 900, D : 500, CD : 400, C : 100, XC : 90,
-                    L : 50, XL : 40, X : 10, IX : 9, V : 5, IV : 4, I : 1};
-    let roman = '';
-    let i;
-    for ( i in lookup ) {
-      while ( num >= lookup[i] ) {
-        roman += i;
-        num -= lookup[i];
-      }
-    }
-    return roman;
-  }
-
-  public fromRoman(str: string): number {
-    let result = 0;
-    const lookup = {M : 1000, CM : 900, D : 500, CD : 400, C : 100, XC : 90,
-      L : 50, XL : 40, X : 10, IX : 9, V : 5, IV : 4, I : 1};
-    let i;
-    for ( i in lookup ) {
-      while (str.indexOf(i) === 0) {
-        result += lookup[i];
-        str = str.replace(i, '');
-      }
-    }
-    return result;
-  }
-
-  public validateSystem(str: string, base: number): boolean {
-    const len = str.length;
-
-    for(let i = 0; i < len; i++) {
-      const cnr = this.charToNr(str.charCodeAt(i));
-      if (cnr >= base)
-        return false;
-    }
-
-    return true;
-  }
-
-  public pow2(exp: number): BigInteger {
-    const two: BigInteger = bigInt(2);
-    return two.shiftLeft(exp - 1);
+    const pushed = this.bitsArray.find((b) => bits >= b);
+    return pushed ? pushed : bits;
   }
 }

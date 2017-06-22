@@ -1,6 +1,6 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {NgLog} from "../../utils/ngLog";
-import {throttle} from "../../utils/throttle";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { NgLog } from '../../utils/ngLog';
+import { throttle } from '../../utils/throttle';
 
 @NgLog()
 @Component({
@@ -10,29 +10,28 @@ import {throttle} from "../../utils/throttle";
 })
 export class InputWithSystemComponent {
 
-  @Input() value: string;
-  @Input() system: number;
+  @Input() public value: string;
+  @Input() public system: number;
 
-  @Input() systems;
-  @Input() bitsArray: number[];
-  @Input() displaySystemNumber: boolean = false;
+  @Input() public systems;
+  @Input() public bitsArray: number[];
+  @Input() public displaySystemNumber: boolean = false;
 
-  @Input() hasBitSelect: boolean = false;
-  @Input() bits: number;
+  @Input() public hasBitSelect: boolean = false;
+  @Input() public bits: number;
 
-  @Input() placeholder: string = "Your value";
+  @Input() public placeholder: string = 'Your value';
 
-
-  @Output() valueChange = new EventEmitter<string>();
-  @Output() systemChange = new EventEmitter<number>();
-  @Output() bitsChange = new EventEmitter<number>();
+  @Output() public valueChange = new EventEmitter<string>();
+  @Output() public systemChange = new EventEmitter<number>();
+  @Output() public bitsChange = new EventEmitter<number>();
 
   @throttle()
-  setValue() {
+  public setValue() {
     this.valueChange.emit(this.value);
   }
 
-  setSystem(newSystem: number) {
+  public setSystem(newSystem: number) {
     this.system = newSystem;
     this.systemChange.emit(this.system);
   }

@@ -1,15 +1,15 @@
-import {Observable} from "rxjs";
+import { Observable } from 'rxjs';
 
-export function log$(target : any, propertyKey : string ) {
+export function log$(target: any, propertyKey: string ) {
   let propertyValue;
 
   function getter() {
     return propertyValue;
   }
 
-  function setter( value : any ) {
-    if( value instanceof Observable ) {
-      propertyValue = value.do(res => {
+  function setter( value: any ) {
+    if ( value instanceof Observable ) {
+      propertyValue = value.do((res) => {
         const isArrayOfObjects = Array.isArray(res) && typeof res[0] === 'object';
         const logType = isArrayOfObjects ? 'table' : 'log';
         console.groupCollapsed(propertyKey);

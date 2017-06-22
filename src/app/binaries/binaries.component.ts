@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {ConversionsService} from "../services/conversions.service";
-import {MetaDataService} from "../services/meta-data.service";
-import {BigInteger} from "big-integer";
-import {Operation} from "../operation-select/operation";
-let bigInt = require('big-integer');
+import { Component, OnInit } from '@angular/core';
+import { ConversionsService } from '../services/conversions.service';
+import { MetaDataService } from '../services/meta-data.service';
+import { BigInteger } from 'big-integer';
+import { Operation } from '../operation-select/operation';
+const bigInt = require('big-integer');
 
 @Component({
   selector: 'app-binaries',
@@ -12,22 +12,12 @@ let bigInt = require('big-integer');
 })
 export class BinariesComponent implements OnInit {
 
-  value: string[] = ['', ''];
-  system = [0, 0];
-  systemManuallySelected = [false, false];
-  detectedSystem = [0, 0];
-  private _operation: Operation = null;
+  public value: string[] = ['', ''];
+  public system = [0, 0];
+  public systemManuallySelected = [false, false];
+  public detectedSystem = [0, 0];
 
-  get operation() {
-    return this._operation;
-  }
-
-  set operation(newValue: Operation) {
-    this._operation = newValue;
-    this.valueChange();
-  }
-
-  operations: Operation[] = [
+  public operations: Operation[] = [
     {
       name: '& (AND)',
       calculate: (num1, num2) => num1.and(num2)
@@ -42,12 +32,12 @@ export class BinariesComponent implements OnInit {
     }
   ];
 
-  systems = [];
+  public systems = [];
 
-  results = [];
-  error: string = null;
+  public results = [];
+  public error: string = null;
 
-  tags = [
+  public tags = [
     'binary calculator',
     'binary operations',
     'binary AND',
@@ -63,27 +53,39 @@ export class BinariesComponent implements OnInit {
     'hexadecimal operations'
   ];
 
-  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
-    this.systems = conversions.systems;
+  private _operation: Operation = null;
+
+  get operation() {
+    return this._operation;
   }
 
-  ngOnInit(): void {
+  set operation(newValue: Operation) {
+    this._operation = newValue;
+    this.valueChange();
+  }
+
+  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
+    this.systems = conversions.binarySystems;
+  }
+
+  public ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - binary operations: AND, OR on any base');
   }
 
-  systemSelected(index: number) {
+  public systemSelected(index: number) {
     this.systemManuallySelected[index] = true;
     this.valueChange(index);
   }
 
-  valueChange(index?: number) {
+  public valueChange(index?: number) {
     if (index !== null && index !== undefined) {
       this.value[index] = this.value[index].trim();
 
       this.detectSystem(index);
 
-      if (!this.validate(index))
+      if (!this.validate(index)) {
         return;
+      }
     }
 
     try {
@@ -101,7 +103,8 @@ export class BinariesComponent implements OnInit {
   }
 
   private validate(index: number) {
-    if (!this.conversions.validateSystem(this.value[index], this.systems[this.system[index]].nr)) {
+    if (!ConversionsService.validateSystem(this.value[index],
+        this.systems[this.system[index]].nr)) {
       this.error = 'Incorrect value for that number system.';
       return false;
     }
@@ -131,7 +134,7 @@ export class BinariesComponent implements OnInit {
     this.results = [];
     for (let i = 0; i < this.systems.length; i++) {
       let str = num1.toString(this.systems[i].nr);
-      str = this.conversions.format(str, this.systems[i].nr);
+      str = ConversionsService.format(str, this.systems[i].nr);
       this.results[i] = str.toUpperCase();
     }
   }

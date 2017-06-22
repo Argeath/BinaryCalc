@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { MetaDataService } from '../services/meta-data.service';
-let bigInt = require('big-integer');
+import { BigInteger } from 'big-integer';
+const bigInt = require('big-integer');
 
 @Component({
   selector: 'app-conversions',
@@ -10,36 +11,15 @@ let bigInt = require('big-integer');
 })
 export class ConversionsComponent implements OnInit {
 
-  private _value: string = '';
+  public systemManuallySelected: boolean = false;
+  public detectedSystem: number = 0;
 
-  get value() {
-    return this._value;
-  }
-  set value(newValue: string) {
-    this._value = newValue.trim();
-    this.valueChange();
-  }
+  public systems = [];
 
-  private _system: number = 0;
+  public results = [];
+  public error: string = null;
 
-  get system() {
-    return this._system;
-  }
-  set system(newSystem: number) {
-    this._system = newSystem;
-    this.systemManuallySelected = true;
-    this.valueChange();
-  }
-
-  systemManuallySelected: boolean = false;
-  detectedSystem: number = 0;
-
-  systems = [];
-
-  results = [];
-  error: string = null;
-
-  tags = [
+  public tags = [
     'number system',
     'numeral system',
     'binary',
@@ -70,20 +50,42 @@ export class ConversionsComponent implements OnInit {
     'binary calculator'
   ];
 
+  private _value: string = '';
+
+  get value() {
+    return this._value;
+  }
+  set value(newValue: string) {
+    this._value = newValue.trim();
+    this.valueChange();
+  }
+
+  private _system: number = 0;
+
+  get system() {
+    return this._system;
+  }
+  set system(newSystem: number) {
+    this._system = newSystem;
+    this.systemManuallySelected = true;
+    this.valueChange();
+  }
+
   constructor(private conversions: ConversionsService, private meta: MetaDataService) {
-    this.systems = conversions.systems;
+    this.systems = conversions.binarySystems;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.meta.title$.next('Binary Calculator - number base conversions, ' +
-      'binary to decimal, hexadecimal, octal numerals');
+      'binary to decimal, hexadecimal, octal numeralSystems');
   }
 
-  valueChange() {
+  public valueChange() {
     this.detectSystem();
 
-    if(!this.validate())
+    if (!this.validate()) {
       return;
+    }
 
     try {
       this.calculate();
@@ -101,7 +103,7 @@ export class ConversionsComponent implements OnInit {
   }
 
   private validate(): boolean {
-    if (!this.conversions.validateSystem(this.value, this.systems[this.system].nr)) {
+    if (!ConversionsService.validateSystem(this.value, this.systems[this.system].nr)) {
       this.error = 'Incorrect value for that number system.';
       return false;
     }
@@ -111,7 +113,7 @@ export class ConversionsComponent implements OnInit {
   }
 
   private calculate() {
-    const num = bigInt(this.value, this.systems[this.system].nr);
+    const num: BigInteger = bigInt(this.value, this.systems[this.system].nr);
 
     if (isNaN(num.valueOf())) {
       this.error = 'Incorrect value for that number system.';
@@ -119,9 +121,11 @@ export class ConversionsComponent implements OnInit {
     }
 
     this.results = [];
+    let str;
+
     for (let i = 0; i < this.systems.length; i++) {
-      let str = num.toString(this.systems[i].nr);
-      this.results[i] = this.conversions.format(str, this.systems[i].nr);
+      str = num.toString(this.systems[i].nr);
+      this.results[i] = ConversionsService.format(str, this.systems[i].nr);
     }
   }
 }
