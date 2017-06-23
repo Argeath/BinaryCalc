@@ -126,14 +126,10 @@ export class NegativesComponent implements OnInit {
       return false;
     }
 
-    const maxVal = ConversionsService.pow2(this.bits - 1);
-    const mask = ConversionsService.pow2(this.bits).minus(1);
-    const negU1 = dec.not().and(mask);
-    const negU2 = negU1.add(1);
-
     // Z-M
     try {
-      this.calculateSignAndMagnitude(dec, maxVal);
+      this.results[0].data = this.calculateSignAndMagnitude(dec, this.bits);
+      this.results[0].error = null;
 
     } catch (e) {
       this.results[0].error = e;
@@ -141,7 +137,8 @@ export class NegativesComponent implements OnInit {
 
     // U1
     try {
-      this.calculateOnesComplement(dec, maxVal, negU1);
+      this.results[1].data = this.calculateOnesComplement(dec, this.bits);
+      this.results[1].error = null;
 
     } catch (e) {
       this.results[1].error = e;
@@ -149,11 +146,77 @@ export class NegativesComponent implements OnInit {
 
     // U2
     try {
-      this.calculateTwosComplement(dec, maxVal, negU2);
+      this.results[2].data = this.calculateTwosComplement(dec, this.bits);
+      this.results[2].error = null;
 
     } catch (e) {
       this.results[2].error = e;
     }
+  }
+
+  public calculateSignAndMagnitude(dec: BigInteger, bits: number): string[] {
+    const maxVal = ConversionsService.pow2(bits - 1);
+
+    if (dec.compareAbs(maxVal) === -1) { // dec < maxVal
+      const zmVal = dec.add(maxVal); // 2^8, 2^16 ...
+      const result: string[] = [];
+
+      for (let i = 0; i < this.systems.length; i++) {
+        let str = zmVal.toString(this.systems[i].nr);
+        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
+        str = ConversionsService.format(str, this.systems[i].nr);
+
+        result[i] = str.toUpperCase();
+      }
+
+      return result;
+    }
+
+    throw new Error('Bit amount not big enough.');
+  }
+
+  public calculateOnesComplement(dec: BigInteger, bits: number): string[] {
+    const maxVal = ConversionsService.pow2(bits - 1);
+    const mask = ConversionsService.pow2(bits).minus(1);
+    const neg = dec.not().and(mask);
+
+    if (dec.compareAbs(maxVal) === -1) {
+      const result: string[] = [];
+
+      for (let i = 0; i < this.systems.length; i++) {
+        let str = neg.toString(this.systems[i].nr);
+        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
+        str = ConversionsService.format(str, this.systems[i].nr);
+
+        result[i] = str.toUpperCase();
+      }
+
+      return result;
+    }
+
+    throw new Error('Bit amount not big enough.');
+  }
+
+  public calculateTwosComplement(dec: BigInteger, bits: number): string[] {
+    const maxVal = ConversionsService.pow2(bits - 1);
+    const mask = ConversionsService.pow2(bits).minus(1);
+    const neg = dec.not().and(mask).add(1);
+
+    if (dec.compareAbs(maxVal.add(1)) === -1) {
+      const result: string[] = [];
+
+      for (let i = 0; i < this.systems.length; i++) {
+        let str = neg.toString(this.systems[i].nr);
+        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
+        str = ConversionsService.format(str, this.systems[i].nr);
+
+        result[i] = str.toUpperCase();
+      }
+
+      return result;
+    }
+
+    throw new Error('Bit amount not big enough.');
   }
 
   private detectSystem(str: string) {
@@ -174,62 +237,6 @@ export class NegativesComponent implements OnInit {
         this.bits = this.conversions.detectBitLengthForNegative(str,
           this.systems[this.system].nr, true);
       }
-    }
-  }
-
-  private calculateSignAndMagnitude(dec: BigInteger, maxVal: BigInteger) {
-    if (dec.compareAbs(maxVal) === -1) { // dec < maxVal
-      const zmVal = dec.add(maxVal); // 2^8, 2^16 ...
-
-      this.results[0].data = [];
-      for (let i = 0; i < this.systems.length; i++) {
-        let str = zmVal.toString(this.systems[i].nr);
-        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
-        str = ConversionsService.format(str, this.systems[i].nr);
-
-        this.results[0].data[i] = str.toUpperCase();
-      }
-
-      this.results[0].error = null;
-
-    } else {
-      this.results[0].error = 'Bit amount not big enough.';
-    }
-  }
-
-  private calculateOnesComplement(dec: BigInteger, maxVal: BigInteger, neg: BigInteger) {
-    if (dec.compareAbs(maxVal) === -1) {
-      this.results[1].data = [];
-      for (let i = 0; i < this.systems.length; i++) {
-        let str = neg.toString(this.systems[i].nr);
-        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
-        str = ConversionsService.format(str, this.systems[i].nr);
-
-        this.results[1].data[i] = str.toUpperCase();
-      }
-
-      this.results[1].error = null;
-
-    } else {
-      this.results[1].error = 'Bit amount not big enough.';
-    }
-  }
-
-  private calculateTwosComplement(dec: BigInteger, maxVal: BigInteger, neg: BigInteger) {
-    if (dec.compareAbs(maxVal.add(1)) === -1) {
-      this.results[2].data = [];
-      for (let i = 0; i < this.systems.length; i++) {
-        let str = neg.toString(this.systems[i].nr);
-        str = ConversionsService.fillBitsToFullBytesWithZeros(str, this.systems[i].nr, this.bits);
-        str = ConversionsService.format(str, this.systems[i].nr);
-
-        this.results[2].data[i] = str.toUpperCase();
-      }
-
-      this.results[2].error = null;
-
-    } else {
-      this.results[2].error = 'Bit amount not big enough.';
     }
   }
 }

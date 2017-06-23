@@ -2,19 +2,28 @@ import { Injectable } from '@angular/core';
 import { BigInteger } from 'big-integer';
 const bigInt = require('big-integer');
 
+export enum NumeralSystems {
+  ARABIC, ROMAN
+}
+
+export enum BinarySystems {
+  BINARY, OCTAL, DECIMAL, HEXADECIMAL
+}
+
 export interface System {
-  nr?: number;
   name: string;
-  skipDetection?: boolean;
+}
+
+export interface BinarySystem extends System {
+  nr: number;
+  system: BinarySystems;
+  skipDetection: boolean;
 }
 
 @Injectable()
 export class ConversionsService {
 
-  public static ARABIC = 0;
-  public static ROMAN = 1;
-
-  public static detectNumeralSystem(v: string): number {
+  public static detectNumeralSystem(v: string): NumeralSystems {
     v = v.toUpperCase();
 
     let i = v.length;
@@ -28,7 +37,7 @@ export class ConversionsService {
       }
     }
 
-    return dec ? ConversionsService.ARABIC : ConversionsService.ROMAN; // 0 - arabic, 1 - roman
+    return dec ? NumeralSystems.ARABIC : NumeralSystems.ROMAN; // 0 - arabic, 1 - roman
   }
 
   public static getHighestNumeral(v: string) {
@@ -102,6 +111,10 @@ export class ConversionsService {
       remaining = bits / 4 - str.length;
     }
 
+    if (remaining <= 0) {
+      return str;
+    }
+
     return '0'.repeat(remaining) + str;
   }
 
@@ -158,24 +171,28 @@ export class ConversionsService {
 
   public bitsArray = [4, 8, 16, 32, 64];
 
-  public binarySystems: System[] = [
+  public binarySystems: BinarySystem[] = [
     {
       nr: 2,
+      system: BinarySystems.BINARY,
       name: 'binary',
       skipDetection: false
     },
     {
       nr: 8,
+      system: BinarySystems.OCTAL,
       name: 'octal',
       skipDetection: true
     },
     {
       nr: 10,
+      system: BinarySystems.DECIMAL,
       name: 'decimal',
       skipDetection: false
     },
     {
       nr: 16,
+      system: BinarySystems.HEXADECIMAL,
       name: 'hexadecimal',
       skipDetection: false
     }
@@ -190,14 +207,14 @@ export class ConversionsService {
     }
   ];
 
-  public detectSystem(v: string, pushToHigher?: boolean): number {
+  public detectSystem(v: string, pushToHigher?: boolean): BinarySystems {
     const max = ConversionsService.getHighestNumeral(v);
 
     if (!pushToHigher) {
       return max;
     }
 
-    return this.binarySystems.findIndex((s) => !s.skipDetection && s.nr <= max);
+    return this.binarySystems.find((s) => !s.skipDetection && s.nr >= max).system;
   }
 
   public detectBitLength(num: number, pushToHigher?: boolean): number {
