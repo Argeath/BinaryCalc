@@ -7,8 +7,10 @@
   <app-input-with-system [(value)]="value"
                          [systems]="systems"
                          [(system)]="system"
+                         (systemChange)="systemSelected()"
                          [hasBitSelect]="true"
                          [(bits)]="bits"
+                         (bitsChange)="bitsSelected()"
                          [bitsArray]="bitsArray"
                          [displaySystemNumber]="true">
   </app-input-with-system>

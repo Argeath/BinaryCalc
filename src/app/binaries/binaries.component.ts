@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { MetaDataService } from '../services/meta-data.service';
-import { BigInteger } from 'big-integer';
+import * as bigInt from 'big-integer';
 import { Operation } from '../operation-select/operation';
-const bigInt = require('big-integer');
+import { Angulartics2 } from 'angulartics2';
+import throttle from 'lodash/throttle';
 
 @Component({
   selector: 'app-binaries',
@@ -15,7 +16,6 @@ export class BinariesComponent implements OnInit {
   public value: string[] = ['', ''];
   public system = [0, 0];
   public systemManuallySelected = [false, false];
-  public detectedSystem = [0, 0];
 
   public operations: Operation[] = [
     {
@@ -64,7 +64,7 @@ export class BinariesComponent implements OnInit {
     this.valueChange();
   }
 
-  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService, private ga: Angulartics2) {
     this.systems = conversions.binarySystems;
   }
 
@@ -75,30 +75,51 @@ export class BinariesComponent implements OnInit {
   public systemSelected(index: number) {
     this.systemManuallySelected[index] = true;
     this.valueChange(index);
+
+
+    this.ga.eventTrack.next({
+      action: 'select system',
+      properties: {
+        category: 'binaries',
+        label: `(${this.system[0]}), (${this.system[1]})`
+      }
+    });
   }
 
   public valueChange(index?: number) {
-    if (index !== null && index !== undefined) {
-      this.value[index] = this.value[index].trim();
+    return throttle(() => {
+      if (index !== null && index !== undefined) {
+        this.value[index] = this.value[index].trim();
 
-      this.detectSystem(index);
+        this.detectSystem(index);
 
-      if (!this.validate(index)) {
-        return;
+        if (!this.validate(index)) {
+          return;
+        }
       }
-    }
 
-    try {
-      this.calculate();
-    } catch (e) {
-      this.error = e;
-    }
+      try {
+        this.calculate();
+
+        this.ga.eventTrack.next({
+          action: 'calculate',
+          properties: {
+            category: 'binaries',
+            label: `${this.value[0]} (${this.system[0]}), ${this.value[1]} (${this.system[1]})`
+          }
+        });
+      } catch (e) {
+        this.error = e;
+      }
+    }, 1000)();
   }
 
   private detectSystem(index: number) {
     if (!this.systemManuallySelected[index]) {
-      this.detectedSystem[index] = this.conversions.detectSystem(this.value[index], true);
-      this.system[index] = this.detectedSystem[index];
+      const found = this.conversions.detectSystem(this.value[index], true);
+      if (found) {
+        this.system[index] = found;
+      }
     }
   }
 
@@ -119,8 +140,8 @@ export class BinariesComponent implements OnInit {
   }
 
   private calculate() {
-    let num1: BigInteger = bigInt(this.value[0], this.systems[this.system[0]].nr);
-    const num2: BigInteger = bigInt(this.value[1], this.systems[this.system[1]].nr);
+    let num1: bigInt.BigInteger = bigInt(this.value[0], this.systems[this.system[0]].nr);
+    const num2: bigInt.BigInteger = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
     if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
       this.error = 'Incorrect value for that number system.';

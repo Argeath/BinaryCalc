@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { Color } from './color';
 import { MetaDataService } from '../services/meta-data.service';
+import { Angulartics2 } from 'angulartics2';
+import throttle from 'lodash/throttle';
 
 @Component({
   selector: 'app-colors',
@@ -29,8 +31,8 @@ export class ColorsComponent implements OnInit {
     }
   ];
 
-  public detectedSystem: number = -1;
-  public systemManuallySelected: boolean = false;
+  public detectedSystem = -1;
+  public systemManuallySelected = false;
   public results = [];
   public error: string = null;
 
@@ -52,7 +54,7 @@ export class ColorsComponent implements OnInit {
     'CMYK conversion'
   ];
 
-  private _value: string = '';
+  private _value = '';
 
   get value() {
     return this._value;
@@ -62,7 +64,7 @@ export class ColorsComponent implements OnInit {
     this.valueChange();
   }
 
-  private _system: number = -1;
+  private _system = -1;
 
   get system() {
     return this._system;
@@ -73,7 +75,7 @@ export class ColorsComponent implements OnInit {
     this.valueChange();
   }
 
-  constructor(public conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(public conversions: ConversionsService, private meta: MetaDataService, private ga: Angulartics2) {
   }
 
   public ngOnInit(): void {
@@ -82,36 +84,45 @@ export class ColorsComponent implements OnInit {
   }
 
   public valueChange() {
+    return throttle(() => {
+      const value = this.value.replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
 
-    const value = this.value.replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
-
-    if (!this.systemManuallySelected) {
-      this.detectedSystem = this.detectSystem(value);
-      this._system = this.detectedSystem;
-    }
-
-    this.color = new Color();
-    if (this.system === 0) { // Hex
-      if (!this.validateHex(value)) {
-        return;
+      if (!this.systemManuallySelected) {
+        this.detectedSystem = this.detectSystem(value);
+        this._system = this.detectedSystem;
       }
 
-      this.fromHex(value);
+      this.color = new Color();
+      if (this.system === 0) { // Hex
+        if (!this.validateHex(value)) {
+          return;
+        }
 
-    } else if (this.system === 1) { // RGB
-      this.fromRGB(value);
+        this.fromHex(value);
 
-    } else if (this.system === 2) { // HSL
-      this.fromHSL(value);
+      } else if (this.system === 1) { // RGB
+        this.fromRGB(value);
 
-    } else if (this.system === 3) { // CMYK
-      this.fromCMYK(value);
-    }
+      } else if (this.system === 2) { // HSL
+        this.fromHSL(value);
 
-    this.results[0] = this.color.printHex();
-    this.results[1] = this.color.printRGB();
-    this.results[2] = this.color.printHsl();
-    this.results[3] = this.color.printCmyk();
+      } else if (this.system === 3) { // CMYK
+        this.fromCMYK(value);
+      }
+
+      this.ga.eventTrack.next({
+        action: 'calculate',
+        properties: {
+          category: 'colors',
+          label: `${this.value} (${this.system})`
+        }
+      });
+
+      this.results[0] = this.color.printHex();
+      this.results[1] = this.color.printRGB();
+      this.results[2] = this.color.printHsl();
+      this.results[3] = this.color.printCmyk();
+    }, 1000)();
   }
 
   private validateHex(value: string) {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BigInteger } from 'big-integer';
-const bigInt = require('big-integer');
+import * as bigInt from 'big-integer';
 
 export enum NumeralSystems {
   ARABIC, ROMAN
@@ -27,7 +26,7 @@ export class ConversionsService {
     v = v.toUpperCase();
 
     let i = v.length;
-    let dec: boolean = true;
+    let dec = true;
 
     while (i--) {
       const cnr = v.charCodeAt(i);
@@ -161,8 +160,8 @@ export class ConversionsService {
     return true;
   }
 
-  public static pow2(exp: number): BigInteger {
-    const two: BigInteger = bigInt(2);
+  public static pow2(exp: number): bigInt.BigInteger {
+    const two: bigInt.BigInteger = bigInt(2);
     return two.shiftLeft(exp - 1);
   }
 
@@ -214,7 +213,9 @@ export class ConversionsService {
       return max;
     }
 
-    return this.binarySystems.find((s) => !s.skipDetection && s.nr >= max).system;
+    const found = this.binarySystems.find((s) => !s.skipDetection && s.nr > max);
+
+    return found && found.system;
   }
 
   public detectBitLength(num: number, pushToHigher?: boolean): number {

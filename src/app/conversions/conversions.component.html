@@ -8,6 +8,7 @@
   <app-input-with-system [(value)]="value"
                          [systems]="systems"
                          [(system)]="system"
+                         (systemChange)="systemSelected()"
                          [displaySystemNumber]="true">
   </app-input-with-system>
 

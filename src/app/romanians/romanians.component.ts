@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { MetaDataService } from '../services/meta-data.service';
-const bigInt = require('big-integer');
+import * as bigInt from 'big-integer';
 
 @Component({
   selector: 'app-romanians',
@@ -10,12 +10,12 @@ const bigInt = require('big-integer');
 })
 export class RomaniansComponent implements OnInit {
 
-  public systemManuallySelected: boolean = false;
-  public detectedNumeral: number = -1;
+  public systemManuallySelected = false;
+  public detectedNumeral = -1;
 
   public systems = [];
 
-  public result: string = '';
+  public result = '';
   public error: string = null;
 
   public tags = [
@@ -29,7 +29,7 @@ export class RomaniansComponent implements OnInit {
     'romanian calculator'
   ];
 
-  private _value: string = '';
+  private _value = '';
 
   get value() {
     return this._value;
@@ -39,7 +39,7 @@ export class RomaniansComponent implements OnInit {
     this.valueChange();
   }
 
-  private _system: number = 0;
+  private _system = 0;
 
   get system() {
     return this._system;
@@ -68,7 +68,7 @@ export class RomaniansComponent implements OnInit {
     }
 
     if (this.system === 0) {
-      this.result = ConversionsService.fromArabicToRoman(bigInt(this.value));
+      this.result = ConversionsService.fromArabicToRoman(bigInt(this.value).valueOf());
     } else {
       this.result = ConversionsService.fromRomanToArabic(this.value) + '';
     }
@@ -84,9 +84,9 @@ export class RomaniansComponent implements OnInit {
   private validate(): string {
     if (this.system === 0) {
       try {
-        const num = bigInt(this.value);
+        const num = bigInt(this.value).valueOf();
 
-        if (isNaN(num.value)) {
+        if (isNaN(num)) {
           return 'Incorrect value for that number system.';
         }
 

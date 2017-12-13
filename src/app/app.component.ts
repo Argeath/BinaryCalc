@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConversionsService } from './services/conversions.service';
 import { Title } from '@angular/platform-browser';
 import { MetaDataService } from './services/meta-data.service';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs/Subscription';
+import { Angulartics2GoogleAnalytics } from "angulartics2/ga";
 
 @Component({
-  selector: 'app',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   providers: [
@@ -16,12 +17,11 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  public ENV = ENV;
-
   private titleSubscribe: Subscription;
 
   public constructor(private titleService: Title,
-                     private meta: MetaDataService) {
+                     private meta: MetaDataService,
+                     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
   }
 
   public ngOnInit(): void {

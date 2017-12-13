@@ -12,7 +12,7 @@
 
   <app-error *ngIf="value.length > 0" [error]="error"></app-error>
 
-  <div class="result-box row" *ngIf="valid && !error">
+  <div class="result-box row" *ngIf="results.length > 0 && !error">
     <app-result class="col-md-6" [results]="results" [customSystems]="systems"></app-result>
     <div class="col-md-2 color" [ngStyle]="{'background-color': results[0]}"></div>
   </div>

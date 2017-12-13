@@ -1,0 +1,61 @@
+{
+  "masterPicture": "src/assets/favicon.png",
+  "iconsPath": "/assets/icon",
+  "design": {
+    "ios": {
+      "pictureAspect": "noChange",
+      "assets": {
+        "ios6AndPriorIcons": false,
+        "ios7AndLaterIcons": false,
+        "precomposedIcons": false,
+        "declareOnlyDefaultIcon": true
+      },
+      "appName": "Binary Calc"
+    },
+    "desktopBrowser": {},
+    "windows": {
+      "pictureAspect": "noChange",
+      "backgroundColor": "#da532c",
+      "onConflict": "override",
+      "assets": {
+        "windows80Ie10Tile": false,
+        "windows10Ie11EdgeTiles": {
+          "small": false,
+          "medium": true,
+          "big": false,
+          "rectangle": false
+        }
+      },
+      "appName": "Binary Calc"
+    },
+    "androidChrome": {
+      "pictureAspect": "shadow",
+      "themeColor": "#ffffff",
+      "manifest": {
+        "name": "Binary Calc",
+        "display": "standalone",
+        "orientation": "notSet",
+        "onConflict": "override",
+        "declared": true
+      },
+      "assets": {
+        "legacyIcon": false,
+        "lowResolutionIcons": false
+      }
+    },
+    "safariPinnedTab": {
+      "pictureAspect": "blackAndWhite",
+      "threshold": 89.84375,
+      "themeColor": "#5bbad5"
+    }
+  },
+  "settings": {
+    "compression": 3,
+    "scalingAlgorithm": "NearestNeighbor",
+    "errorOnImageTooSmall": false
+  },
+  "versioning": {
+    "paramName": "v",
+    "paramValue": "YAo75RPrWR"
+  }
+}

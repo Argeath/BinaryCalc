@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { MetaDataService } from '../services/meta-data.service';
-import { BigInteger } from 'big-integer';
+import * as bigInt from 'big-integer';
 import { Operation } from '../operation-select/operation';
-const bigInt = require('big-integer');
+import { Angulartics2 } from 'angulartics2';
+import throttle from 'lodash/throttle';
 
 @Component({
   selector: 'app-arithmetics',
@@ -71,7 +72,7 @@ export class ArithmeticsComponent implements OnInit {
     this.valueChange();
   }
 
-  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService, private ga: Angulartics2) {
     this.systems = conversions.binarySystems;
   }
 
@@ -80,33 +81,54 @@ export class ArithmeticsComponent implements OnInit {
       'Addition, Subtraction, Modulus, Division on any base');
   }
 
-  public systemSelected(num: number) {
-    this.systemManuallySelected[num] = true;
-    this.valueChange(num);
+  public systemSelected(index: number) {
+    this.systemManuallySelected[index] = true;
+    this.valueChange(index);
+
+    this.ga.eventTrack.next({
+      action: 'select system',
+      properties: {
+        category: 'arithmetics',
+        label: `(${this.system[0]}), (${this.system[1]})`
+      }
+    });
   }
 
   public valueChange(index?: number) {
-    if (index != null) {
-      this.value[index] = this.value[index].trim();
+    return throttle(() => {
+      if (index != null) {
+        this.value[index] = this.value[index].trim();
 
-      this.detectSystem(index);
+        this.detectSystem(index);
 
-      if (!this.validate(index)) {
-        return;
+        if (!this.validate(index)) {
+          return;
+        }
       }
-    }
 
-    try {
-      this.calculate();
+      try {
+        this.calculate();
 
-    } catch (e) {
-      this.error = e;
-    }
+        this.ga.eventTrack.next({
+          action: 'calculate',
+          properties: {
+            category: 'arithmetics',
+            label: `${this.value[0]} (${this.system[0]}), ${this.value[1]} (${this.system[1]})`
+          }
+        });
+
+      } catch (e) {
+        this.error = e;
+      }
+    }, 1000)();
   }
 
   private detectSystem(index: number): void {
     if (!this.systemManuallySelected[index]) {
-      this.system[index] = this.conversions.detectSystem(this.value[index], true);
+      const found = this.conversions.detectSystem(this.value[index], true);
+      if (found) {
+        this.system[index] = found;
+      }
     }
   }
 
@@ -129,8 +151,8 @@ export class ArithmeticsComponent implements OnInit {
   }
 
   private calculate(): void {
-    let num1: BigInteger = bigInt(this.value[0], this.systems[this.system[0]].nr);
-    const num2: BigInteger = bigInt(this.value[1], this.systems[this.system[1]].nr);
+    let num1: bigInt.BigInteger = bigInt(this.value[0], this.systems[this.system[0]].nr);
+    const num2: bigInt.BigInteger = bigInt(this.value[1], this.systems[this.system[1]].nr);
 
     if (isNaN(num1.valueOf()) || isNaN(num2.valueOf())) {
       this.error = 'Incorrect value for that number system.';

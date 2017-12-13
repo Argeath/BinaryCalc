@@ -1,8 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgLog } from '../../utils/ngLog';
 import { throttle } from '../../utils/throttle';
 
-@NgLog()
 @Component({
   selector: 'app-input-with-system',
   templateUrl: 'inputWithSystem.component.html',

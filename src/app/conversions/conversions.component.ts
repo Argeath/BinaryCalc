@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversionsService } from '../services/conversions.service';
 import { MetaDataService } from '../services/meta-data.service';
-import { BigInteger } from 'big-integer';
-const bigInt = require('big-integer');
+import * as bigInt from 'big-integer';
+import { Angulartics2 } from 'angulartics2';
+import throttle from 'lodash/throttle';
 
 @Component({
   selector: 'app-conversions',
@@ -11,8 +12,7 @@ const bigInt = require('big-integer');
 })
 export class ConversionsComponent implements OnInit {
 
-  public systemManuallySelected: boolean = false;
-  public detectedSystem: number = 0;
+  public systemManuallySelected = false;
 
   public systems = [];
 
@@ -50,28 +50,31 @@ export class ConversionsComponent implements OnInit {
     'binary calculator'
   ];
 
-  private _value: string = '';
+  private _value = '';
 
   get value() {
     return this._value;
   }
   set value(newValue: string) {
-    this._value = newValue.trim();
-    this.valueChange();
+    if (this._value !== newValue) {
+      this._value = newValue.trim();
+      this.valueChange();
+    }
   }
 
-  private _system: number = 0;
+  private _system = 0;
 
   get system() {
     return this._system;
   }
   set system(newSystem: number) {
-    this._system = newSystem;
-    this.systemManuallySelected = true;
-    this.valueChange();
+    if (this._system !== newSystem) {
+      this._system = newSystem;
+      this.valueChange();
+    }
   }
 
-  constructor(private conversions: ConversionsService, private meta: MetaDataService) {
+  constructor(private conversions: ConversionsService, private meta: MetaDataService, private ga: Angulartics2) {
     this.systems = conversions.binarySystems;
   }
 
@@ -80,25 +83,49 @@ export class ConversionsComponent implements OnInit {
       'binary to decimal, hexadecimal, octal numeralSystems');
   }
 
+  public systemSelected() {
+    this.systemManuallySelected = true;
+
+    this.ga.eventTrack.next({
+      action: 'select system',
+      properties: {
+        category: 'conversions',
+        label: this.system
+      }
+    });
+  }
+
   public valueChange() {
-    this.detectSystem();
+    return throttle(() => {
+      this.detectSystem();
 
-    if (!this.validate()) {
-      return;
-    }
+      if (!this.validate()) {
+        return;
+      }
 
-    try {
-      this.calculate();
+      try {
+        this.calculate();
 
-    } catch (e) {
-      this.error = e;
-    }
+        this.ga.eventTrack.next({
+          action: 'calculate',
+          properties: {
+            category: 'conversions',
+            label: this.value,
+            system: this.system
+          }
+        });
+      } catch (e) {
+        this.error = e;
+      }
+    }, 1000)();
   }
 
   private detectSystem() {
     if (!this.systemManuallySelected) {
-      this.detectedSystem = this.conversions.detectSystem(this.value, true);
-      this._system = this.detectedSystem;
+      const found = this.conversions.detectSystem(this.value, true);
+      if (found) {
+        this.system = found;
+      }
     }
   }
 
@@ -113,7 +140,7 @@ export class ConversionsComponent implements OnInit {
   }
 
   private calculate() {
-    const num: BigInteger = bigInt(this.value, this.systems[this.system].nr);
+    const num: bigInt.BigInteger = bigInt(this.value, this.systems[this.system].nr);
 
     if (isNaN(num.valueOf())) {
       this.error = 'Incorrect value for that number system.';

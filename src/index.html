@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pl">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Binary Calculator - Numeral base conversions, binary to decimal, negative numbers, two's complement, sign magnitude</title>
 
-  <title><%= htmlWebpackPlugin.options.title %></title>
-  <meta name="description" content="Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp" />
-  <meta name="keywords" content="calculator, binary, numeral, base, system, converter, conversion, rgb, cmyk, hsl, arithmetic, operations, negative, number, roman, arabic, representation, unix, timestamp, time" />
+  <meta name="description" content="Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp, two's complement, sign magnitude" />
+  <meta name="keywords" content="calculator, binary, numeral, base, system, converter, conversion, rgb, cmyk, hsl, arithmetic, operations, negative, number, roman, arabic, representation, unix, timestamp, time, two's complement, sign magnitude" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Dominik Kinal" />
 
@@ -19,22 +19,21 @@
   <meta property="fb:app_id" content="284621538623018">
   <meta property="og:description" content="Binary Calculator - Numeral base conversions, Decimal, Hexadecimal, Octal, RGB, CMYK, HSL conversions, Negative number representations, Unix timestamp">
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png?v=YAo75RPrWR">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png?v=YAo75RPrWR">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png?v=YAo75RPrWR">
+  <link rel="manifest" href="/assets/icon/manifest.json?v=YAo75RPrWR">
+  <link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg?v=YAo75RPrWR" color="#5bbad5">
+  <link rel="shortcut icon" href="/assets/icon/favicon.ico?v=YAo75RPrWR">
+  <meta name="apple-mobile-web-app-title" content="Binary Calc">
+  <meta name="application-name" content="Binary Calc">
+  <meta name="msapplication-config" content="/assets/icon/browserconfig.xml?v=YAo75RPrWR">
+  <meta name="theme-color" content="#ffffff">
 
-  <% if (webpackConfig.htmlElements.headTags) { %>
-  <!-- Configured Head Tags  -->
-  <%= webpackConfig.htmlElements.headTags %>
-  <% } %>
-
-  <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
-
-  <%= htmlWebpackPlugin.files.webpackManifest %>
-
+  <base href="/">
 </head>
-
 <body>
-
-  <app>
+  <app-root>
     <div class="container">
       <header class="logo text-center">
         <img src="https://c19y2fqn.cloudimg.io/s/cdn/x/http://binary-calc.com/assets/img/logo.png" width="150" height="150" alt="logo"/> <h1>Binary Calculator</h1>
@@ -44,7 +43,7 @@
         <div class="cube2"></div>
       </div>
     </div>
-  </app>
+  </app-root>
 
   <div id="fb-root"></div>
 
@@ -71,20 +70,13 @@
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
 
-  <!-- Google Analytics: change UA-71073175-1 to be your site's ID -->
   <script>
     (function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=r;A[l]=A[l]||function(){
-    (A[l].q=A[l].q||[]).push(arguments)},A[l].l=1*new Date();a=n.createElement(g),
-    r=n.getElementsByTagName(g)[0];a.async=1;a.src=u;r.parentNode.insertBefore(a,r)
+      (A[l].q=A[l].q||[]).push(arguments)},A[l].l=1*new Date();a=n.createElement(g),
+      r=n.getElementsByTagName(g)[0];a.async=1;a.src=u;r.parentNode.insertBefore(a,r)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-12606596-8', 'auto');
-    ga('send', 'pageview');
   </script>
-
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-  <!-- Webpack Dev Server reload -->
-  <script src="/webpack-dev-server.js"></script>
-  <% } %>
 </body>
 </html>

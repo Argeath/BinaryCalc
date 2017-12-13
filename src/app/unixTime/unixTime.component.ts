@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
 // import * as moment from 'moment/moment';
 import { MetaDataService } from '../services/meta-data.service';
+import {TimerObservable} from 'rxjs/observable/TimerObservable';
 
 @Component({
-  selector: 'app-unixTime',
+  selector: 'app-unix-time',
   templateUrl: './unixTime.component.html',
   styleUrls: ['./unixTime.component.scss']
 })
 export class UnixTimeComponent implements OnDestroy, OnInit {
   public timer = null;
 
-  public value: string = '';
+  public value = '';
   public currentTimestampSeconds: number = Math.ceil(Date.now() / 1000);
   public currentTimestamp: number = Date.now();
 
@@ -26,13 +26,13 @@ export class UnixTimeComponent implements OnDestroy, OnInit {
     }
   ];
 
-  public system: number = -1;
-  public detectedSystem: number = -1;
-  public systemManuallySelected: boolean = false;
+  public system = -1;
+  public detectedSystem = -1;
+  public systemManuallySelected = false;
   public results = [];
   public error: string = null;
 
-  public valid: boolean = false;
+  public valid = false;
 
   constructor(private meta: MetaDataService) {
   }
@@ -42,7 +42,7 @@ export class UnixTimeComponent implements OnDestroy, OnInit {
   }
 
   public onStart() {
-    this.timer = Observable.timer(1000, 1000).subscribe((t) => {
+    this.timer = TimerObservable.create(1000, 1000).subscribe((t) => {
       this.currentTimestamp = Math.ceil(Date.now() / 1000);
     });
   }
